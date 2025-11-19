@@ -12,8 +12,16 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { NavLink } from "react-router";
 
-const pages = ["Buy", "Sell", "rent", "New Build"];
+const pages = [
+  { name: "Buy", path: "/buy" },
+  { name: "Sell", path: "/sell" },
+  { name: "Rent", path: "/rent" },
+  { name: "New Build", path: "/new-build" },
+  { name: "Login", path: "/account" },
+  { name: "Sign up", path: "/account/register" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -47,12 +55,9 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
@@ -90,8 +95,17 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: "center" }}>
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "navlink mob active" : "navlink mob"
+                      }
+                      to={page.path}
+                    >
+                      {page.name}
+                    </NavLink>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -100,13 +114,10 @@ function ResponsiveAppBar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
@@ -124,11 +135,18 @@ function ResponsiveAppBar() {
           >
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "navlink active" : "navlink"
+                  }
+                  to={page.path}
+                >
+                  {page.name}
+                </NavLink>
               </Button>
             ))}
           </Box>
