@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 const connectDB = require("./db");
-import userRoutes from "./routes/authRoutes";
+import authRouter from "./routes/authRoutes";
 
 dotenv.config();
 const app = express();
@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running now  ");
 });
 
-app.use("/auth", userRoutes);
+app.use("/auth", authRouter);
 
 const PORT = process.env.PORT || 5009;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
