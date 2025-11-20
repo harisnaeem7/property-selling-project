@@ -1,9 +1,10 @@
 import * as yup from "yup";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-
+import Grid from "@mui/material/Grid";
 import {
   TextField,
   Typography,
@@ -11,18 +12,33 @@ import {
   NativeSelect,
   Button,
 } from "@mui/material";
+import { RegisterUser } from "../../api/auth";
+
+type RegisterFormInputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phone?: number;
+  role?: string;
+};
 
 const schema = yup.object({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
   email: yup.string().email().required(),
   password: yup.string().required(),
-  confirmPassword: yup.string().required(),
+  confirmPassword: yup
+    .string()
+    .required()
+    .oneOf([yup.ref("password")], "Passwords must match"),
   phone: yup.number(),
   role: yup.string(),
 });
 
 const Register = () => {
+  const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -34,6 +50,22 @@ const Register = () => {
     },
   });
   //const onSubmit = (data) => console.log(data);
+  const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
+    setServerError(null);
+    console.log(data);
+    try {
+      const respone = await RegisterUser(data);
+      console.log(respone);
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        setServerError(err.response.data.message);
+      } else {
+        setServerError("Something went wrong. Please try again.");
+      }
+      console.log(err.response.data.message);
+    }
+  };
+
   return (
     <Container maxWidth="sm">
       <Box
@@ -57,30 +89,34 @@ const Register = () => {
           Please fill this form to create an account!
         </Typography>
         <br />
-        <form onSubmit={handleSubmit((data) => console.log(data))}>
-          <TextField
-            fullWidth
-            size="small"
-            id="outlined-basic"
-            label="First Name"
-            variant="outlined"
-            {...register("firstName")}
-            error={!!errors.firstName}
-            helperText={errors.firstName?.message}
-          />
-          <br />
-          <br />
-          <TextField
-            fullWidth
-            size="small"
-            id="outlined-basic"
-            label="Last Name"
-            variant="outlined"
-            {...register("lastName")}
-            error={!!errors.lastName}
-            helperText={errors.lastName?.message}
-          />
-          <br />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={2}>
+            <Grid size={6}>
+              <TextField
+                fullWidth
+                size="small"
+                id="outlined-basic"
+                label="First Name"
+                variant="outlined"
+                {...register("firstName")}
+                error={!!errors.firstName}
+                helperText={errors.firstName?.message}
+              />
+            </Grid>
+            <Grid size={6}>
+              <TextField
+                fullWidth
+                size="small"
+                id="outlined-basic"
+                label="Last Name"
+                variant="outlined"
+                {...register("lastName")}
+                error={!!errors.lastName}
+                helperText={errors.lastName?.message}
+              />
+            </Grid>
+          </Grid>
+
           <br />
           <TextField
             fullWidth
@@ -89,8 +125,8 @@ const Register = () => {
             label="Email"
             variant="outlined"
             {...register("email")}
-            error={!!errors.email}
-            helperText={errors.email?.message}
+            error={!!errors.email || !!serverError}
+            helperText={errors.email?.message || serverError}
           />
           <br />
           <br />
@@ -132,6 +168,7 @@ const Register = () => {
             size="small"
             id="outlined-basic"
             label="Password"
+            type="password"
             variant="outlined"
             {...register("password")}
             error={!!errors.password}
@@ -144,6 +181,7 @@ const Register = () => {
             size="small"
             id="outlined-basic"
             label="Confirm Password"
+            type="password"
             variant="outlined"
             {...register("confirmPassword")}
             error={!!errors.confirmPassword}
