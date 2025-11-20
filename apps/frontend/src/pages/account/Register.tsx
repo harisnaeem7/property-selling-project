@@ -13,6 +13,7 @@ import {
   NativeSelect,
   Button,
 } from "@mui/material";
+import Alert from "@mui/material/Alert";
 import { RegisterUser } from "../../api/auth";
 
 type RegisterFormInputs = {
@@ -40,6 +41,7 @@ const schema = yup.object({
 
 const Register = () => {
   const [serverError, setServerError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -53,6 +55,7 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     setServerError(null);
+    setApiError(null);
     try {
       const respone = await RegisterUser(data);
       console.log(respone);
@@ -60,7 +63,8 @@ const Register = () => {
       if (err.response?.data?.message) {
         setServerError(err.response.data.message);
       } else {
-        setServerError("Something went wrong. Please try again.");
+        //setServerError("Something went wrong. Please try again.");
+        setApiError("Something went wrong. Please try again.");
       }
       console.log(err.response.data.message);
     }
@@ -184,6 +188,13 @@ const Register = () => {
             />
             <br />
             <br />
+            {apiError && (
+              <>
+                <Alert severity="error">{apiError}</Alert>
+                <br />
+              </>
+            )}
+
             <Button
               sx={{ width: "100%" }}
               type="submit"
