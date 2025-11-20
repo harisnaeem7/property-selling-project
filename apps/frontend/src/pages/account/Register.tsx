@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import signupBG from "../../../public/signup-bg.jpg";
 import { TextField, Typography, NativeSelect, Button } from "@mui/material";
 import Alert from "@mui/material/Alert";
-import { RegisterUser } from "../../api/auth";
+import { LogInUser, RegisterUser } from "../../api/auth";
 
 type RegisterFormInputs = {
   firstName: string;
@@ -55,6 +55,7 @@ const Register = () => {
     try {
       const respone = await RegisterUser(data);
       setSuccessMessage("Account created successfully!");
+      const login = await LogInUser(data);
     } catch (err: any) {
       if (err.response?.data?.message) {
         setServerError(err.response.data.message);

@@ -3,6 +3,18 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import User from "../models/Users";
 
+const createToken = (id: string) => {
+  const token = jwt.sign(
+    {
+      id,
+    },
+    process.env.JWT_SECRET!,
+    { expiresIn: "1h" }
+  );
+
+  return token;
+};
+
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, role, phone, createdAt } =
@@ -26,9 +38,10 @@ export const registerUser = async (req: Request, res: Response) => {
         phone,
         createdAt: new Date(),
       });
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-        expiresIn: "1h",
-      });
+      const token = createToken(user.email);
+
+      console.log("new token is here: ", token);
+
       return res
         .status(200)
         .json({ message: `User with email ${email} created successfully!` });
@@ -49,11 +62,18 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body || {};
 
     const existingUser = await User.findOne({ email });
+
     if (existingUser) {
+      const isMatching = await bcrypt.compare(password, existingUser.password);
+      const role = existingUser.role;
+      if (!isMatching) {
+        return res.status(401).json({ message: "Invalid email or password." });
+      } else {
+        const token = createToken(existingUser.email);
+        return res.status(200).json({ message: "User found", token, role });
+      }
     } else {
-      return res
-        .status(401)
-        .json({ message: "Please enter valid email or password." });
+      return res.status(401).json({ message: "Invalid email or password." });
     }
   } catch (err: any) {
     return res
