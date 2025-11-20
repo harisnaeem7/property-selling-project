@@ -1,10 +1,16 @@
 import * as yup from "yup";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
-import { TextField, Select, MenuItem } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  InputLabel,
+  NativeSelect,
+  Button,
+} from "@mui/material";
 
 const schema = yup.object({
   firstName: yup.string().required(),
@@ -21,14 +27,40 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      role: "buyer",
+    },
+  });
   //const onSubmit = (data) => console.log(data);
   return (
     <Container maxWidth="sm">
-      <Box component="section" sx={{ p: 2, border: "1px solid grey" }}>
-        register
+      <Box
+        component="section"
+        sx={{
+          p: 5,
+          pt: 2,
+          border: "0px solid grey",
+          width: 350,
+          margin: "0 auto",
+          mt: 5,
+          boxShadow: 9,
+          borderRadius: 2,
+        }}
+      >
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+          Sign Up
+        </Typography>
+        <br />
+        <Typography variant="body1">
+          Please fill this form to create an account!
+        </Typography>
+        <br />
         <form onSubmit={handleSubmit((data) => console.log(data))}>
           <TextField
+            fullWidth
+            size="small"
             id="outlined-basic"
             label="First Name"
             variant="outlined"
@@ -37,16 +69,22 @@ const Register = () => {
             helperText={errors.firstName?.message}
           />
           <br />
+          <br />
           <TextField
+            fullWidth
+            size="small"
             id="outlined-basic"
-            label="First Name"
+            label="Last Name"
             variant="outlined"
             {...register("lastName")}
             error={!!errors.lastName}
             helperText={errors.lastName?.message}
           />
           <br />
+          <br />
           <TextField
+            fullWidth
+            size="small"
             id="outlined-basic"
             label="Email"
             variant="outlined"
@@ -55,21 +93,43 @@ const Register = () => {
             helperText={errors.email?.message}
           />
           <br />
+          <br />
           <TextField
+            fullWidth
+            size="small"
             id="outlined-basic"
             label="Phone"
             variant="outlined"
             {...register("phone")}
-            error={!!errors.phone}
-            helperText={errors.phone?.message}
           />
           <br />
-          <Select {...register("role")} labelId="role-label" label="Role">
-            <MenuItem value="buyer">Buyer</MenuItem>
-            <MenuItem value="seller">Seller</MenuItem>
-          </Select>
+          <br />
+
+          <InputLabel
+            sx={{ textAlign: "left" }}
+            variant="standard"
+            htmlFor="uncontrolled-native"
+          >
+            Role
+          </InputLabel>
+          <NativeSelect
+            fullWidth
+            {...register("role")}
+            defaultValue="buyer"
+            inputProps={{
+              name: "role",
+              id: "uncontrolled-native",
+            }}
+          >
+            <option value="buyer">Buyer</option>
+            <option value="seller">Seller</option>
+          </NativeSelect>
+
+          <br />
           <br />
           <TextField
+            fullWidth
+            size="small"
             id="outlined-basic"
             label="Password"
             variant="outlined"
@@ -78,7 +138,10 @@ const Register = () => {
             helperText={errors.password?.message}
           />
           <br />
+          <br />
           <TextField
+            fullWidth
+            size="small"
             id="outlined-basic"
             label="Confirm Password"
             variant="outlined"
@@ -87,7 +150,15 @@ const Register = () => {
             helperText={errors.confirmPassword?.message}
           />
           <br />
-          <input type="submit" />
+          <br />
+          <Button
+            sx={{ width: "100%" }}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Register
+          </Button>
         </form>
       </Box>
     </Container>
