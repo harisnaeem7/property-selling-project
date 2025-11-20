@@ -35,8 +35,9 @@ const Login = () => {
     setServerError(null);
     setSuccessMessage(null);
     try {
-      const respone = await LogInUser(data);
-      console.log(respone);
+      const response = await LogInUser(data);
+      console.log(response);
+      localStorage.setItem("token", response.token);
       setSuccessMessage("Logged in successfully!");
     } catch (err: any) {
       console.log(err.response?.data?.message);

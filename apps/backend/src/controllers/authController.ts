@@ -70,7 +70,9 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.status(401).json({ message: "Invalid email or password." });
       } else {
         const token = createToken(existingUser.email);
-        return res.status(200).json({ message: "User found", token, role });
+        return res
+          .status(200)
+          .json({ message: "User found", token, email, role });
       }
     } else {
       return res.status(401).json({ message: "Invalid email or password." });
