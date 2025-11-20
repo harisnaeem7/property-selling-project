@@ -1,11 +1,13 @@
-import * as React from "react";
 import * as yup from "yup";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Schedule } from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+
+import { TextField, Select, MenuItem } from "@mui/material";
 
 const schema = yup.object({
-  fristName: yup.string().required(),
+  firstName: yup.string().required(),
   lastName: yup.string().required(),
   email: yup.string().email().required(),
   password: yup.string().required(),
@@ -21,35 +23,74 @@ const Register = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
   //const onSubmit = (data) => console.log(data);
-
   return (
-    <div>
-      register
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
-        <input {...register("fristName")} placeholder="First Name" />
-        <p>{errors.fristName?.message}</p>
-        <input {...register("lastName")} placeholder="Last Name" />
-        <p>{errors.lastName?.message}</p>
-        <input {...register("email")} placeholder="Email" />
-        <p>{errors.email?.message}</p>
-        <input {...register("phone")} placeholder="Phone" />
-        <p>{errors.phone?.message}</p>
-        <select {...register("role")} defaultValue="Buyer">
-          <option value="" disabled>
-            Select role
-          </option>
-          <option value="buyer">Buyer</option>
-          <option value="seller">Seller</option>
-        </select>
-        <p>{errors.role?.message}</p>
-
-        <input {...register("password")} placeholder="Password" />
-        <p>{errors.password?.message}</p>
-        <input {...register("confirmPassword")} placeholder="Password" />
-        <p>{errors.confirmPassword?.message}</p>
-        <input type="submit" />
-      </form>
-    </div>
+    <Container maxWidth="sm">
+      <Box component="section" sx={{ p: 2, border: "1px solid grey" }}>
+        register
+        <form onSubmit={handleSubmit((data) => console.log(data))}>
+          <TextField
+            id="outlined-basic"
+            label="First Name"
+            variant="outlined"
+            {...register("firstName")}
+            error={!!errors.firstName}
+            helperText={errors.firstName?.message}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="First Name"
+            variant="outlined"
+            {...register("lastName")}
+            error={!!errors.lastName}
+            helperText={errors.lastName?.message}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Email"
+            variant="outlined"
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Phone"
+            variant="outlined"
+            {...register("phone")}
+            error={!!errors.phone}
+            helperText={errors.phone?.message}
+          />
+          <br />
+          <Select {...register("role")} labelId="role-label" label="Role">
+            <MenuItem value="buyer">Buyer</MenuItem>
+            <MenuItem value="seller">Seller</MenuItem>
+          </Select>
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Password"
+            variant="outlined"
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Confirm Password"
+            variant="outlined"
+            {...register("confirmPassword")}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+          />
+          <br />
+          <input type="submit" />
+        </form>
+      </Box>
+    </Container>
   );
 };
 
