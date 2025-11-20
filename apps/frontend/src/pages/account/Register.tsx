@@ -151,22 +151,7 @@ const Register = () => {
             <br />
             <br />
 
-            <InputLabel
-              sx={{ textAlign: "left" }}
-              variant="standard"
-              htmlFor="uncontrolled-native"
-            >
-              Role
-            </InputLabel>
-            <NativeSelect
-              fullWidth
-              {...register("role")}
-              defaultValue="buyer"
-              inputProps={{
-                name: "role",
-                id: "uncontrolled-native",
-              }}
-            >
+            <NativeSelect fullWidth {...register("role")}>
               <option value="buyer">Buyer</option>
               <option value="seller">Seller</option>
             </NativeSelect>
