@@ -49,10 +49,9 @@ const Register = () => {
       role: "buyer",
     },
   });
-  //const onSubmit = (data) => console.log(data);
+
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     setServerError(null);
-    console.log(data);
     try {
       const respone = await RegisterUser(data);
       console.log(respone);
