@@ -6,13 +6,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import signupBG from "../../../public/signup-bg.jpg";
-import {
-  TextField,
-  Typography,
-  InputLabel,
-  NativeSelect,
-  Button,
-} from "@mui/material";
+import { TextField, Typography, NativeSelect, Button } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { RegisterUser } from "../../api/auth";
 
@@ -42,6 +36,7 @@ const schema = yup.object({
 const Register = () => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -56,9 +51,10 @@ const Register = () => {
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     setServerError(null);
     setApiError(null);
+    setSuccessMessage(null);
     try {
       const respone = await RegisterUser(data);
-      console.log(respone);
+      setSuccessMessage("Account created successfully!");
     } catch (err: any) {
       if (err.response?.data?.message) {
         setServerError(err.response.data.message);
@@ -66,7 +62,6 @@ const Register = () => {
         //setServerError("Something went wrong. Please try again.");
         setApiError("Something went wrong. Please try again.");
       }
-      console.log(err.response.data.message);
     }
   };
 
@@ -191,6 +186,12 @@ const Register = () => {
             {apiError && (
               <>
                 <Alert severity="error">{apiError}</Alert>
+                <br />
+              </>
+            )}
+            {successMessage && (
+              <>
+                <Alert severity="success">{successMessage}</Alert>
                 <br />
               </>
             )}
