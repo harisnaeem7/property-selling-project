@@ -26,13 +26,13 @@ type RegisterFormInputs = {
 };
 
 const schema = yup.object({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  email: yup.string().email().required(),
-  password: yup.string().required(),
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required."),
+  email: yup.string().email().required("Email is required"),
+  password: yup.string().required("Password is required"),
   confirmPassword: yup
     .string()
-    .required()
+    .required("Confrim password is required")
     .oneOf([yup.ref("password")], "Passwords must match"),
   phone: yup.number(),
   role: yup.string(),
