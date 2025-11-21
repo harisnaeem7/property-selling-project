@@ -1,11 +1,11 @@
-import { useState } from "react";
 import "./App.css";
 import NavBar from "./components/header/NavBar";
-
+import Routing from "./routes/Routes";
 function App() {
   return (
     <>
       <NavBar />
+      <Routing />
     </>
   );
 }
