@@ -13,6 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
 
 const pages = [
   { name: "Buy", path: "/buy" },
@@ -25,6 +27,7 @@ const pages = [
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
+  const auth = useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -94,20 +97,28 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "navlink mob active" : "navlink mob"
-                      }
-                      to={page.path}
-                    >
-                      {page.name}
-                    </NavLink>
-                  </Typography>
-                </MenuItem>
-              ))}
+              {pages
+                .filter((page) => {
+                  if (auth?.isLoggedIn) {
+                    return page.name.toLowerCase() !== "sign up";
+                  } else {
+                    return page;
+                  }
+                })
+                .map((page) => (
+                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                    <Typography sx={{ textAlign: "center" }}>
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "navlink mob active" : "navlink mob"
+                        }
+                        to={page.path}
+                      >
+                        {page.name}
+                      </NavLink>
+                    </Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -130,27 +141,46 @@ function ResponsiveAppBar() {
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
-              justifyContent: "end",
+              justifyContent: "center",
             }}
           >
-            {pages.map((page) => (
-              <Button
-                key={page.name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "navlink active" : "navlink"
-                  }
-                  to={page.path}
+            {pages
+              .filter((page) => {
+                if (auth?.isLoggedIn) {
+                  return page.name.toLowerCase() !== "sign up";
+                } else {
+                  return page;
+                }
+              })
+              .map((page) => (
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  {page.name}
-                </NavLink>
-              </Button>
-            ))}
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "navlink active" : "navlink"
+                    }
+                    to={page.path}
+                  >
+                    {page.name}
+                  </NavLink>
+                </Button>
+              ))}
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: "flex",
+              flexDirection: "row",
+              gap: "20px",
+              alignItems: "center",
+            }}
+          >
+            {auth?.isLoggedIn && (
+              <Typography variant="body1">Hi Haris</Typography>
+            )}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

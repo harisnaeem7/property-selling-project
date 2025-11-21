@@ -38,6 +38,7 @@ const Login = () => {
       const response = await LogInUser(data);
       console.log(response);
       localStorage.setItem("token", response.token);
+      localStorage.setItem("user", response.email);
       setSuccessMessage("Logged in successfully!");
     } catch (err: any) {
       console.log(err.response?.data?.message);
