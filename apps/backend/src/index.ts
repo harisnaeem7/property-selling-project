@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 const connectDB = require("./db");
 import authRouter from "./routes/authRoutes";
+import authUserRouter from "./controllers/protectedRouteController";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/user", authUserRouter);
 
 const PORT = process.env.PORT || 5009;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

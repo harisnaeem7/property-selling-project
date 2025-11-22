@@ -38,7 +38,7 @@ export const registerUser = async (req: Request, res: Response) => {
         phone,
         createdAt: new Date(),
       });
-      const token = createToken(user.email);
+      const token = createToken(user._id.toString());
 
       console.log("new token is here: ", token);
 
@@ -66,13 +66,20 @@ export const loginUser = async (req: Request, res: Response) => {
     if (existingUser) {
       const isMatching = await bcrypt.compare(password, existingUser.password);
       const role = existingUser.role;
+      const firstName = existingUser.firstName;
+      const lastName = existingUser.lastName;
       if (!isMatching) {
         return res.status(401).json({ message: "Invalid email or password." });
       } else {
-        const token = createToken(existingUser.email);
-        return res
-          .status(200)
-          .json({ message: "User found", token, email, role });
+        const token = createToken(existingUser._id.toString());
+        return res.status(200).json({
+          message: "User found",
+          token,
+          email,
+          role,
+          firstName,
+          lastName,
+        });
       }
     } else {
       return res.status(401).json({ message: "Invalid email or password." });
