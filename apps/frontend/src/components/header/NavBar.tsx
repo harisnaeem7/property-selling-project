@@ -17,7 +17,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
 
 const pages = [
-  { name: "Buy", path: "/buy" },
+  { name: "Dashboard", path: "/user/dashboard" },
   { name: "Sell", path: "/sell" },
   { name: "Rent", path: "/rent" },
   { name: "New Build", path: "/new-build" },
