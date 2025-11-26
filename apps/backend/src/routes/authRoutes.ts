@@ -1,5 +1,6 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { loginUser, registerUser } from "../controllers/authController";
+import { verifyToken } from "../middleware/protectedroutes";
 
 const authRouter = express.Router();
 
