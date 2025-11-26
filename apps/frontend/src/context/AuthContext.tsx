@@ -22,7 +22,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user") || "null";
-
     if (token) {
       setAuth({
         isLoggedIn: true,
