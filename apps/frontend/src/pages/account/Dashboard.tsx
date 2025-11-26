@@ -1,3 +1,5 @@
+import ProtectedRoute from "../../routes/ProtectedRoutes";
+
 const Dashboard = () => {
   return (
     <>

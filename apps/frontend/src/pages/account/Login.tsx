@@ -2,13 +2,14 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { TextField, Button, Typography } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import loginBG from "../../../public/loginbg.jpg";
 import { LogInUser } from "../../api/auth";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 type UserInput = {
   email: string;
@@ -24,6 +25,8 @@ const Login = () => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [backedError, setBackendError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const auth = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -40,6 +43,8 @@ const Login = () => {
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", response.email);
       setSuccessMessage("Logged in successfully!");
+      auth?.login(response.token, response.email);
+      navigate("/user/dashboard", { replace: true });
     } catch (err: any) {
       console.log(err.response?.data?.message);
       if (err.response?.data?.message) {
