@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     return <div>Please wait....</div>;
   }
 
-  if (!auth.isLoggedIn || !setVerify) {
+  if (!auth.isLoggedIn || !verify) {
     return <Navigate to="/account" replace />;
   }
 
