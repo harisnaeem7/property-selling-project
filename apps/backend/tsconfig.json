@@ -12,7 +12,9 @@
     "resolveJsonModule": true, // Allow importing JSON files
     "sourceMap": true, // Generate source maps
     "noUncheckedIndexedAccess": true, // Safety for indexed access
-    "exactOptionalPropertyTypes": true // Stricter optional checks
+    "exactOptionalPropertyTypes": true, // Stricter optional checks
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

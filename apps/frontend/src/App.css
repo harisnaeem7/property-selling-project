@@ -41,3 +41,16 @@
 .read-the-docs {
   color: #888;
 }
+
+.navlink {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+.navlink.mob {
+  color: #1d1d1b;
+}
+.navlink.active {
+  text-decoration: underline;
+}

@@ -3,6 +3,18 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import User from "../models/Users";
 
+const createToken = (id: string) => {
+  const token = jwt.sign(
+    {
+      id,
+    },
+    process.env.JWT_SECRET!,
+    { expiresIn: "2m" }
+  );
+
+  return token;
+};
+
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, role, phone, createdAt } =
@@ -26,9 +38,10 @@ export const registerUser = async (req: Request, res: Response) => {
         phone,
         createdAt: new Date(),
       });
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-        expiresIn: "1h",
-      });
+      const token = createToken(user._id.toString());
+
+      console.log("new token is here: ", token);
+
       return res
         .status(200)
         .json({ message: `User with email ${email} created successfully!` });
@@ -49,11 +62,29 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body || {};
 
     const existingUser = await User.findOne({ email });
+
     if (existingUser) {
+      const isMatching = await bcrypt.compare(password, existingUser.password);
+      const role = existingUser.role;
+      const firstName = existingUser.firstName;
+      const lastName = existingUser.lastName;
+      const id = existingUser._id;
+      if (!isMatching) {
+        return res.status(401).json({ message: "Invalid email or password." });
+      } else {
+        const token = createToken(existingUser._id.toString());
+        return res.status(200).json({
+          message: "User found",
+          token,
+          email,
+          id,
+          role,
+          firstName,
+          lastName,
+        });
+      }
     } else {
-      return res
-        .status(401)
-        .json({ message: "Please enter valid email or password." });
+      return res.status(401).json({ message: "Invalid email or password." });
     }
   } catch (err: any) {
     return res
