@@ -9,7 +9,7 @@ const createToken = (id: string) => {
       id,
     },
     process.env.JWT_SECRET!,
-    { expiresIn: "1h" }
+    { expiresIn: "2m" }
   );
 
   return token;
@@ -68,6 +68,7 @@ export const loginUser = async (req: Request, res: Response) => {
       const role = existingUser.role;
       const firstName = existingUser.firstName;
       const lastName = existingUser.lastName;
+      const id = existingUser._id;
       if (!isMatching) {
         return res.status(401).json({ message: "Invalid email or password." });
       } else {
@@ -76,6 +77,7 @@ export const loginUser = async (req: Request, res: Response) => {
           message: "User found",
           token,
           email,
+          id,
           role,
           firstName,
           lastName,
