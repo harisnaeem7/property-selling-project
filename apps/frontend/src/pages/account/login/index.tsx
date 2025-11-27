@@ -1,59 +1,20 @@
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, type SubmitHandler } from "react-hook-form";
 import { TextField, Button, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import loginBG from "../../../../public/loginbg.jpg";
-import { LogInUser } from "../../../api/auth";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../../context/AuthContext";
-
-type UserInput = {
-  email: string;
-  password: string;
-};
-
-const schema = yup.object({
-  email: yup.string().email().required("Please enter a valid email"),
-  password: yup.string().required("Please enter password"),
-});
+import { useLoginController } from "./useLoginController";
 
 const Login = () => {
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [backedError, setBackendError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const auth = useContext(AuthContext);
   const {
-    register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
-
-  const onSubmit: SubmitHandler<UserInput> = async (data) => {
-    setBackendError(null);
-    setServerError(null);
-    setSuccessMessage(null);
-    try {
-      const response = await LogInUser(data);
-      console.log(response);
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", response.email);
-      setSuccessMessage("Logged in successfully!");
-      auth?.login(response.token, response.email);
-      navigate("/user/dashboard", { replace: true });
-    } catch (err: any) {
-      console.log(err.response?.data?.message);
-      if (err.response?.data?.message) {
-        setBackendError(err.response?.data?.message);
-      } else {
-        setServerError("Something went wrong. Please try again");
-      }
-    }
-  };
+    register,
+    errors,
+    onSubmit,
+    serverError,
+    successMessage,
+    backedError,
+  } = useLoginController();
 
   return (
     <Box
