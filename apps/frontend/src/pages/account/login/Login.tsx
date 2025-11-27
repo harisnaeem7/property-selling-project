@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
-import loginBG from "../../../public/loginbg.jpg";
-import { LogInUser } from "../../api/auth";
+import loginBG from "../../../../public/loginbg.jpg";
+import { LogInUser } from "../../../api/auth";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../../context/AuthContext";
 
 type UserInput = {
   email: string;
