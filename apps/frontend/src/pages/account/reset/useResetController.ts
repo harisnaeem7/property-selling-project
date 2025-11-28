@@ -16,14 +16,13 @@ export const useResetController = () => {
   } = useForm({ resolver: yupResolver(resetSchema) });
 
   const onSubmit: SubmitHandler<UserInput> = async (data) => {
+    setSuccessMessage(null);
+    setBackendError(null);
     try {
       const response = await ResetPassword(data);
       console.log(response);
       setSuccessMessage(response?.message);
-      setBackendError(null);
     } catch (err: any) {
-      setSuccessMessage(null);
-
       if (err.response?.data?.message) {
         setBackendError(err.response?.data?.message);
       } else {
