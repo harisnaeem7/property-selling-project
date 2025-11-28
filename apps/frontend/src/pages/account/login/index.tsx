@@ -1,4 +1,5 @@
 import { TextField, Button, Typography } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
@@ -73,7 +74,7 @@ const Login = () => {
               helperText={errors.password?.message}
             />
             <br />
-            <br />
+
             {backedError && (
               <>
                 <Alert severity="error">{backedError}</Alert>
@@ -92,6 +93,11 @@ const Login = () => {
                 <br />
               </>
             )}
+
+            <Typography sx={{ textAlign: "left", mt: "10px" }} variant="body1">
+              <NavLink to="reset">forgot password?</NavLink>
+            </Typography>
+            <br />
             <Button
               sx={{ width: "100%" }}
               type="submit"
@@ -103,7 +109,8 @@ const Login = () => {
             <br />
             <br />
             <Typography variant="body1">
-              Don't have an account? Register Here
+              Don't have an account?{" "}
+              <NavLink to="register">Register Here</NavLink>
             </Typography>
           </form>
         </Box>

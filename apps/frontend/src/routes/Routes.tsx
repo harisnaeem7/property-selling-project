@@ -4,6 +4,7 @@ import Login from "../pages/account/login";
 import Dashboard from "../pages/account/Dashboard";
 import ProtectedRoute from "./ProtectedRoutes";
 import { Outlet } from "react-router-dom";
+import Reset from "../pages/account/reset";
 
 const Routing = () => {
   return (
@@ -11,6 +12,7 @@ const Routing = () => {
       <Route path="account">
         <Route index element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="reset" element={<Reset />} />
       </Route>
       <Route
         path="user"
