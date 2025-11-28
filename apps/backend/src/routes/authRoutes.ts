@@ -3,6 +3,7 @@ import {
   forgotPassword,
   loginUser,
   registerUser,
+  resetPassword,
 } from "../controllers/authController";
 import { RegisterDTO } from "../dtos/registerDTO";
 import { validateRequest } from "../middleware/validate";
@@ -13,6 +14,7 @@ const authRouter = express.Router();
 
 authRouter.post("/register", validateRequest(RegisterDTO), registerUser);
 authRouter.post("/login", validateRequest(LoginDTO), loginUser);
-authRouter.post("/reset", validateRequest(ResetDTO), forgotPassword);
+authRouter.post("/forgot", validateRequest(ResetDTO), forgotPassword);
+authRouter.post("/reset/:token", resetPassword);
 
 export default authRouter;
