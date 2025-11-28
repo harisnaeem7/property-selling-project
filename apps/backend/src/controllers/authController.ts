@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import { sendEmail } from "../services/emailServices";
 import User from "../models/Users";
 
 const createToken = (id: string) => {
@@ -40,6 +41,19 @@ export const registerUser = async (req: Request, res: Response) => {
       });
       const token = createToken(user._id.toString());
 
+      try {
+        await sendEmail({
+          to: email,
+          subject: "Welcome to Real Estate Platform",
+          html: `
+        <h2>Welcome, ${firstName}!</h2>
+        <p>Your account has been successfully created.</p>
+        <p>You can now start listing and selling properties.</p>
+      `,
+        });
+      } catch (err: any) {
+        return res.status(400).json(err);
+      }
       console.log("new token is here: ", token);
 
       return res
