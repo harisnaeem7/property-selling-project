@@ -1,70 +1,23 @@
-import * as yup from "yup";
-import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import signupBG from "../../../public/signup-bg.jpg";
 import { TextField, Typography, NativeSelect, Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import { LogInUser, RegisterUser } from "../../api/auth";
 
-type RegisterFormInputs = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phone?: number;
-  role?: string;
-};
-
-const schema = yup.object({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required."),
-  email: yup.string().email().required("Email is required"),
-  password: yup.string().required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .required("Confrim password is required")
-    .oneOf([yup.ref("password")], "Passwords must match"),
-  phone: yup.number(),
-  role: yup.string(),
-});
+import signupBG from "../../../../public/signup-bg.jpg";
+import { useRegisterController } from "./useRegisterController";
 
 const Register = () => {
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [apiError, setApiError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      role: "buyer",
-    },
-  });
-
-  const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
-    setServerError(null);
-    setApiError(null);
-    setSuccessMessage(null);
-    try {
-      const respone = await RegisterUser(data);
-      setSuccessMessage("Account created successfully!");
-      const login = await LogInUser(data);
-    } catch (err: any) {
-      if (err.response?.data?.message) {
-        setServerError(err.response.data.message);
-      } else {
-        //setServerError("Something went wrong. Please try again.");
-        setApiError("Something went wrong. Please try again.");
-      }
-    }
-  };
+    onSubmit,
+    errors,
+    serverError,
+    backendError,
+    successMessage,
+  } = useRegisterController();
 
   return (
     <Box
@@ -184,9 +137,9 @@ const Register = () => {
             />
             <br />
             <br />
-            {apiError && (
+            {backendError && (
               <>
-                <Alert severity="error">{apiError}</Alert>
+                <Alert severity="error">{backendError}</Alert>
                 <br />
               </>
             )}
@@ -205,6 +158,11 @@ const Register = () => {
             >
               Register
             </Button>
+            <br />
+            <br />
+            <Typography variant="body2">
+              Already have an account? <NavLink to="login">Login</NavLink>
+            </Typography>
           </form>
         </Box>
       </Container>

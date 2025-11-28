@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import crypto from "crypto";
+import { sendEmail } from "../services/emailServices";
 import User from "../models/Users";
 
 const createToken = (id: string) => {
@@ -40,6 +42,19 @@ export const registerUser = async (req: Request, res: Response) => {
       });
       const token = createToken(user._id.toString());
 
+      try {
+        await sendEmail({
+          to: email,
+          subject: "Welcome to Real Estate Platform",
+          html: `
+        <h2>Welcome, ${firstName}!</h2>
+        <p>Your account has been successfully created.</p>
+        <p>You can now start listing and selling properties.</p>
+      `,
+        });
+      } catch (err: any) {
+        return res.status(403).json(err);
+      }
       console.log("new token is here: ", token);
 
       return res
@@ -91,4 +106,66 @@ export const loginUser = async (req: Request, res: Response) => {
       .status(500)
       .json({ message: "Server error", error: err.message });
   }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body || {};
+
+  if (!email) {
+    return res.status(401).json({ message: "Please enter a valid email" });
+  }
+
+  const checkUser = await User.findOne({ email });
+
+  if (!checkUser) {
+    return res.status(404).json({ message: "Email not found!" });
+  }
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  checkUser.resetPasswordToken = resetToken;
+  checkUser.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
+  await checkUser.save();
+
+  const resetURL = `${process.env.FRONTEND_API_URL}account/reset-password/${resetToken}`;
+
+  try {
+    await sendEmail({
+      to: email,
+      subject: "Reset Password",
+      html: `<h2>Reset password</h2>
+        <p>To reset your password, click <a href="${resetURL}">here</a></p> `,
+    });
+  } catch (err: any) {
+    return res.status(403).json(err);
+  }
+
+  return res
+    .status(200)
+    .json({ message: "Email to reset your password has been sent." });
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: "Invalid or expired token" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  user.password = hashedPassword;
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+
+  await user.save();
+
+  return res
+    .status(200)
+    .json({ message: "Password updated successfully!", token, password });
 };
