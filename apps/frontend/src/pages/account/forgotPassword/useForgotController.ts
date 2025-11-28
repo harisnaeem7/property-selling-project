@@ -1,19 +1,19 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import { resetSchema } from "./reset.schema";
-import { type UserInput } from "./reset.type";
+import { forgotSchema } from "./forgot.schema";
+import { type UserInput } from "./forgot.type";
 import { type SubmitHandler } from "react-hook-form";
 import { ResetPassword } from "../../../api/auth";
 
-export const useResetController = () => {
+export const useForgotController = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [backendError, setBackendError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(resetSchema) });
+  } = useForm({ resolver: yupResolver(forgotSchema) });
 
   const onSubmit: SubmitHandler<UserInput> = async (data) => {
     setSuccessMessage(null);

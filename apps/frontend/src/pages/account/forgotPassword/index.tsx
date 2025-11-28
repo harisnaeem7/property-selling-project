@@ -6,9 +6,9 @@ import {
   TextField,
   Alert,
 } from "@mui/material";
-import { useResetController } from "./useResetController";
+import { useForgotController } from "./useForgotController";
 
-const Reset = () => {
+const ForgotPassword = () => {
   const {
     register,
     handleSubmit,
@@ -16,7 +16,7 @@ const Reset = () => {
     onSubmit,
     successMessage,
     backendError,
-  } = useResetController();
+  } = useForgotController();
   return (
     <Box
       sx={{
@@ -91,4 +91,4 @@ const Reset = () => {
   );
 };
 
-export default Reset;
+export default ForgotPassword;

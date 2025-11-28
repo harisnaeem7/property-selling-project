@@ -125,7 +125,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       to: email,
       subject: "Reset Password",
       html: `<h2>Reset password</h2>
-        <p>To reset your password, click <a href="${process.env.API_URL}/reset">here</a></p> `,
+        <p>To reset your password, click <a href="${process.env.API_URL}reset">here</a></p> `,
     });
   } catch (err: any) {
     return res.status(403).json(err);
@@ -134,4 +134,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
   return res
     .status(200)
     .json({ message: "Email to reset your password has been sent." });
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token } = req.params;
 };

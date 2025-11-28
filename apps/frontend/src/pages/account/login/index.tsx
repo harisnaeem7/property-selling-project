@@ -95,7 +95,7 @@ const Login = () => {
             )}
 
             <Typography sx={{ textAlign: "left", mt: "10px" }} variant="body1">
-              <NavLink to="reset">forgot password?</NavLink>
+              <NavLink to="forgot">forgot password?</NavLink>
             </Typography>
             <br />
             <Button
