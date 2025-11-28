@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import crypto from "crypto";
 import { sendEmail } from "../services/emailServices";
 import User from "../models/Users";
 
@@ -120,12 +121,19 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Email not found!" });
   }
 
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  checkUser.resetPasswordToken = resetToken;
+  checkUser.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
+  await checkUser.save();
+
+  const resetURL = `${process.env.FRONTEND_API_URL}account/reset-password/${resetToken}`;
+
   try {
     await sendEmail({
       to: email,
       subject: "Reset Password",
       html: `<h2>Reset password</h2>
-        <p>To reset your password, click <a href="${process.env.API_URL}reset">here</a></p> `,
+        <p>To reset your password, click <a href="${resetURL}">here</a></p> `,
     });
   } catch (err: any) {
     return res.status(403).json(err);
@@ -138,4 +146,26 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
   const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: "Invalid or expired token" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  user.password = hashedPassword;
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+
+  await user.save();
+
+  return res
+    .status(200)
+    .json({ message: "Password updated successfully!", token, password });
 };
