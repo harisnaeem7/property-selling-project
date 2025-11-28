@@ -74,6 +74,7 @@ const Login = () => {
               helperText={errors.password?.message}
             />
             <br />
+            <br />
 
             {backedError && (
               <>
@@ -94,7 +95,14 @@ const Login = () => {
               </>
             )}
 
-            <Typography sx={{ textAlign: "left", mt: "10px" }} variant="body1">
+            <Typography
+              sx={{
+                textAlign: "left",
+                mt: "-15px",
+                pl: "10px",
+              }}
+              variant="body2"
+            >
               <NavLink to="forgot">forgot password?</NavLink>
             </Typography>
             <br />
@@ -108,7 +116,7 @@ const Login = () => {
             </Button>
             <br />
             <br />
-            <Typography variant="body1">
+            <Typography variant="body2">
               Don't have an account?{" "}
               <NavLink to="register">Register Here</NavLink>
             </Typography>

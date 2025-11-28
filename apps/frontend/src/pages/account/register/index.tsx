@@ -1,9 +1,11 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import signupBG from "../../../../public/signup-bg.jpg";
 import { TextField, Typography, NativeSelect, Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import Alert from "@mui/material/Alert";
+
+import signupBG from "../../../../public/signup-bg.jpg";
 import { useRegisterController } from "./useRegisterController";
 
 const Register = () => {
@@ -156,6 +158,11 @@ const Register = () => {
             >
               Register
             </Button>
+            <br />
+            <br />
+            <Typography variant="body2">
+              Already have an account? <NavLink to="login">Login</NavLink>
+            </Typography>
           </form>
         </Box>
       </Container>
