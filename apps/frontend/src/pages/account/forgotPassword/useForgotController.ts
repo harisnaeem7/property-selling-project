@@ -4,7 +4,7 @@ import { useState } from "react";
 import { forgotSchema } from "./forgot.schema";
 import { type UserInput } from "./forgot.type";
 import { type SubmitHandler } from "react-hook-form";
-import { ResetPassword } from "../../../api/auth";
+import { ForgotPassword } from "../../../api/auth";
 
 export const useForgotController = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export const useForgotController = () => {
     setSuccessMessage(null);
     setBackendError(null);
     try {
-      const response = await ResetPassword(data);
+      const response = await ForgotPassword(data);
       console.log(response);
       setSuccessMessage(response?.message);
     } catch (err: any) {

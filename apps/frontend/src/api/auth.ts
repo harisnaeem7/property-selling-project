@@ -11,7 +11,12 @@ export const LogInUser = async (data: any) => {
   return response.data;
 };
 
-export const ResetPassword = async (data: any) => {
-  const response = await axios.post(`${API_URL}/auth/reset`, data);
+export const ForgotPassword = async (data: any) => {
+  const response = await axios.post(`${API_URL}/auth/forgot`, data);
+  return response.data;
+};
+
+export const ResetPassword = async (data: any, token: string) => {
+  const response = await axios.post(`${API_URL}/auth/reset/${token}`, data);
   return response.data;
 };
