@@ -5,12 +5,14 @@ import { Schema } from "./reset.schema";
 import { type UserInput } from "./reset.type";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResetPassword } from "../../../api/auth";
+import { useNavigate } from "react-router-dom";
 
 export const useResetController = () => {
   const [backendError, setBackendError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const { token } = useParams();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -27,6 +29,10 @@ export const useResetController = () => {
       console.log(response);
       console.log(token);
       setSuccessMessage(response?.message);
+
+      setTimeout(() => {
+        navigate("/account");
+      }, 1500);
     } catch (err: any) {
       console.log(err);
       setBackendError(err.response.data.message);
