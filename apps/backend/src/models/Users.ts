@@ -7,8 +7,8 @@ export interface IUser extends Document {
   role: "admin" | "seller" | "buyer";
   phone?: string;
   createdAt: Date;
-  resetPasswordToken?: String;
-  resetPasswordExpires?: Date;
+  resetPasswordToken?: String | null;
+  resetPasswordExpires?: Date | null;
 }
 const userSchema = new mongoose.Schema<IUser>({
   firstName: { type: String, required: true, description: "First Name" },
