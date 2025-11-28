@@ -52,7 +52,7 @@ export const registerUser = async (req: Request, res: Response) => {
       `,
         });
       } catch (err: any) {
-        return res.status(400).json(err);
+        return res.status(403).json(err);
       }
       console.log("new token is here: ", token);
 
@@ -105,4 +105,33 @@ export const loginUser = async (req: Request, res: Response) => {
       .status(500)
       .json({ message: "Server error", error: err.message });
   }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body || {};
+
+  if (!email) {
+    return res.status(401).json({ message: "Please enter a valid email" });
+  }
+
+  const checkUser = await User.findOne({ email });
+
+  if (!checkUser) {
+    return res.status(404).json({ message: "Email not found!" });
+  }
+
+  try {
+    await sendEmail({
+      to: email,
+      subject: "Reset Password",
+      html: `<h2>Reset password</h2>
+        <p>To reset your password, click <a href="${process.env.API_URL}/reset">here</a></p> `,
+    });
+  } catch (err: any) {
+    return res.status(403).json(err);
+  }
+
+  return res
+    .status(200)
+    .json({ message: "Email to reset your password has been sent." });
 };
