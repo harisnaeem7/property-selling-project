@@ -87,6 +87,13 @@ export const loginUser = async (req: Request, res: Response) => {
       if (!isMatching) {
         return res.status(401).json({ message: "Invalid email or password." });
       } else {
+        if (existingUser.isMfaEnabled) {
+          return res.json({
+            message: "MFA required",
+            mfaRequired: true,
+            userId: existingUser._id,
+          });
+        }
         const token = createToken(existingUser._id.toString());
         return res.status(200).json({
           message: "User found",
