@@ -9,6 +9,11 @@ export interface IUser extends Document {
   createdAt: Date;
   resetPasswordToken?: String | null;
   resetPasswordExpires?: Date | null;
+  googleAuthSecret: String;
+  isMfaEnabled: {
+    type: Boolean;
+    default: false;
+  };
 }
 const userSchema = new mongoose.Schema<IUser>({
   firstName: { type: String, required: true, description: "First Name" },
