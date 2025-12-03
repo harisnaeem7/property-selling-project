@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "./api";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,5 +19,15 @@ export const ForgotPassword = async (data: any) => {
 
 export const ResetPassword = async (data: any, token: string) => {
   const response = await axios.post(`${API_URL}/auth/reset/${token}`, data);
+  return response.data;
+};
+
+export const setupMFA = async () => {
+  const response = await api.post(`${API_URL}/auth/mfa/setup`);
+  return response.data;
+};
+
+export const verifyMFA = async (otp: string) => {
+  const response = await api.post(`${API_URL}/auth/mfa/verify`, { token: otp });
   return response.data;
 };
