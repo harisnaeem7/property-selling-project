@@ -1,11 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "../pages/account/register/index";
 import Login from "../pages/account/login";
-import Dashboard from "../pages/account/Dashboard";
+import Profile from "../pages/account/profile/Profile";
 import ProtectedRoute from "./ProtectedRoutes";
 import { Outlet } from "react-router-dom";
 import ForgotPassword from "../pages/account/forgotPassword";
 import { Reset } from "../pages/account/reset";
+import { MFASetup } from "../pages/account/MFA";
+import MFAVerifyLogin from "../pages/account/VerifyMFA";
 
 const Routing = () => {
   return (
@@ -24,8 +26,10 @@ const Routing = () => {
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="profile/mfa-setup" element={<MFASetup />} />
       </Route>
+      <Route path="/auth/mfa-verify" element={<MFAVerifyLogin />} />
     </Routes>
   );
 };

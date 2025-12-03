@@ -9,6 +9,12 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const auth = useContext(AuthContext)!;
   const [loading, setLoading] = useState(true);
   const [verify, setVerify] = useState(false);
+  const token = localStorage.getItem("token");
+  const tempToken = localStorage.getItem("tempToken");
+
+  if (!token && tempToken) {
+    return <Navigate to="/auth/mfa-verify" replace />;
+  }
   useEffect(() => {
     //localStorage.clear();
     api
