@@ -28,11 +28,19 @@ export const useLoginController = () => {
     try {
       const response = await LogInUser(data);
       console.log(response);
+
+      if (response.mfaRequired) {
+        localStorage.setItem("tempToken", response.tempToken);
+        setSuccessMessage("MFA required. Please enter your 6-digit code.");
+        navigate("/auth/mfa-verify", { replace: true });
+        return;
+      }
+
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", response.email);
       setSuccessMessage("Logged in successfully!");
       auth?.login(response.token, response.email);
-      navigate("/user/dashboard", { replace: true });
+      navigate("/user/profile", { replace: true });
     } catch (err: any) {
       console.log(err.response?.data?.message);
       if (err.response?.data?.message) {
