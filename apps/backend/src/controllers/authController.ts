@@ -11,7 +11,7 @@ const createToken = (id: string) => {
       id,
     },
     process.env.JWT_SECRET!,
-    { expiresIn: "2m" }
+    { expiresIn: "45m" }
   );
 
   return token;
@@ -88,9 +88,15 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.status(401).json({ message: "Invalid email or password." });
       } else {
         if (existingUser.isMfaEnabled) {
+          const tempToken = jwt.sign(
+            { id: existingUser._id, mfaStage: true },
+            process.env.JWT_SECRET!,
+            { expiresIn: "15m" } // short-lived token
+          );
           return res.json({
             message: "MFA required",
             mfaRequired: true,
+            tempToken,
             userId: existingUser._id,
           });
         }
