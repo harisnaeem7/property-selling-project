@@ -35,8 +35,14 @@ export const MFASetup = () => {
             fullWidth
             label="Enter 6-digit code"
             value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            // inputProps={{ maxLength: 6 }}
+            inputMode="numeric"
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) {
+                setOtp(value);
+              }
+            }}
+            inputProps={{ maxLength: 6 }}
             sx={{ mb: 2 }}
           />
 

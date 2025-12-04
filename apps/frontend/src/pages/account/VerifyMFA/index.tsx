@@ -31,22 +31,12 @@ const MFAVerifyLogin = () => {
         </Alert>
       )}
 
-      {/* <TextField
-        label="6-digit code"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        fullWidth
-        // inputProps={{ maxLength: 6 }}
-        sx={{ mb: 2 }}
-      />
-       */}
-
       <TextField
         fullWidth
         label="Enter 6-digit code"
         value={code}
-        type="text" // important: keep text, not number
-        inputMode="numeric" // <-- now NOT deprecated
+        type="text"
+        inputMode="numeric"
         onChange={(e) => {
           const value = e.target.value;
           if (/^\d*$/.test(value)) {
