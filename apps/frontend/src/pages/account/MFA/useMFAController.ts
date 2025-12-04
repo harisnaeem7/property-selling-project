@@ -17,6 +17,7 @@ export const useMFAController = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({ resolver: yupResolver(schema) });
 
   const handleSetup = async () => {
@@ -31,6 +32,10 @@ export const useMFAController = () => {
     }
     setLoading(false);
   };
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cleaned = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setValue("code", cleaned, { shouldValidate: true });
+  };
 
   const handleVerify: SubmitHandler<UserInput> = async (data) => {
     setSuccess(null);
@@ -38,10 +43,11 @@ export const useMFAController = () => {
     setVerifying(true);
 
     try {
-      await verifyMFA(data);
+      const respose = await verifyMFA(data);
       setSuccess("MFA Enabled Successfully!");
-    } catch (err) {
-      setError("Invalid code. Try again.");
+      console.log("ok", respose);
+    } catch (err: any) {
+      setError(err.response?.data?.message);
       console.log(err);
     } finally {
       setVerifying(false);
@@ -59,5 +65,6 @@ export const useMFAController = () => {
     success,
     error,
     errors,
+    handleInput,
   };
 };

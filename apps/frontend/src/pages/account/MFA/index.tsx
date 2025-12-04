@@ -20,6 +20,7 @@ export const MFASetup = () => {
     success,
     error,
     errors,
+    handleInput,
     register,
   } = useMFAController();
   return (
@@ -56,6 +57,8 @@ export const MFASetup = () => {
                   error={!!errors.code}
                   helperText={errors.code?.message}
                   sx={{ mb: 2 }}
+                  inputMode="numeric"
+                  onChange={handleInput}
                 />
                 {error && (
                   <>
