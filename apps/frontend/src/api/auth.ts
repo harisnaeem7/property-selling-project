@@ -27,7 +27,7 @@ export const setupMFA = async () => {
   return response.data;
 };
 
-export const verifyMFA = async (otp: string) => {
-  const response = await api.post(`${API_URL}/auth/mfa/verify`, { token: otp });
+export const verifyMFA = async (data: any) => {
+  const response = await api.post(`${API_URL}/auth/mfa/verify`, data);
   return response.data;
 };
