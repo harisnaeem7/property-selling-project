@@ -9,6 +9,8 @@ type AuthState = {
 interface AuthContextType extends AuthState {
   login: (token: string, user: any) => void;
   logout: () => void;
+  verify: () => void;
+  verified: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -19,9 +21,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     token: null,
     user: null,
   });
+
+  const [verified, setVerified] = useState<boolean>(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user") || "null";
+
     if (token) {
       setAuth({
         isLoggedIn: true,
@@ -51,8 +56,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const verify = () => {
+    setVerified(true);
+  };
+
   return (
-    <AuthContext.Provider value={{ ...auth, login, logout }}>
+    <AuthContext.Provider value={{ ...auth, login, logout, verify, verified }}>
       {children}
     </AuthContext.Provider>
   );

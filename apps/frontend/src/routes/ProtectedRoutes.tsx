@@ -21,6 +21,9 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
       .get("/user/me")
       .then((res) => {
         console.log("Verified user:", res.data);
+        if (res.data.user.isMfaEnabled) {
+          auth.verify();
+        }
         setVerify(true);
       })
       .catch(() => {
