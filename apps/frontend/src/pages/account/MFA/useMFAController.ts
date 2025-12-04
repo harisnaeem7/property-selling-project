@@ -1,16 +1,28 @@
 import { useState } from "react";
+
 import { setupMFA, verifyMFA } from "../../../api/auth";
+import { schema } from "./mfa.schema";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { type UserInput } from "./input";
 
 export const useMFAController = () => {
   const [qr, setQr] = useState<string>("");
-  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [success, setSuccess] = useState<string | null>("");
   const [error, setError] = useState<string | null>("");
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
   const handleSetup = async () => {
+    setError("");
     setLoading(true);
+
     try {
       const res = await setupMFA();
       setQr(res.qrCode);
@@ -20,29 +32,32 @@ export const useMFAController = () => {
     setLoading(false);
   };
 
-  const handleVerify = async () => {
+  const handleVerify: SubmitHandler<UserInput> = async (data) => {
     setSuccess(null);
     setError(null);
     setVerifying(true);
+
     try {
-      await verifyMFA(otp);
+      await verifyMFA(data);
       setSuccess("MFA Enabled Successfully!");
     } catch (err) {
       setError("Invalid code. Try again.");
       console.log(err);
+    } finally {
+      setVerifying(false);
     }
-    setVerifying(false);
   };
 
   return {
     handleSetup,
     handleVerify,
+    handleSubmit,
+    register,
     qr,
-    otp,
     loading,
     verifying,
-    setOtp,
     success,
     error,
+    errors,
   };
 };
