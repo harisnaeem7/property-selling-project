@@ -7,7 +7,7 @@ interface AuthRequest extends Request {
 }
 
 export const verifyMFASecret = async (req: AuthRequest, res: Response) => {
-  const code = req.body.token;
+  const { code } = req.body;
 
   if (!code) {
     return res.status(400).json({ message: "Token required" });
