@@ -4,7 +4,8 @@ import { Response } from "express";
 import User from "../models/Users";
 
 export const verifyMFALogin = async (req: any, res: Response) => {
-  const { token: code } = req.body;
+  const { code } = req.body;
+  console.log(code);
   const authHeader = req.headers.authorization;
 
   if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
