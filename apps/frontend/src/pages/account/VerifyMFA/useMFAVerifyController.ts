@@ -2,15 +2,25 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/api";
 import { AuthContext } from "../../../context/AuthContext";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Schema } from "./vmfa.schema";
+import type { UserInput } from "./input";
 
 export const useMFAVerifyController = () => {
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
+  //const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // 🔥 Redirect away if tempToken missing
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({ resolver: yupResolver(Schema) });
+
   useEffect(() => {
     const tempToken = localStorage.getItem("tempToken");
     if (!tempToken) {
@@ -18,10 +28,14 @@ export const useMFAVerifyController = () => {
     }
   }, [navigate]);
 
-  const handleVerify = async () => {
-    setError("");
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cleaned = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setValue("code", cleaned, { shouldValidate: true });
+  };
+  const handleVerify: SubmitHandler<UserInput> = async (code) => {
+    console.log(code);
+    setError(null);
 
-    // ⚡ Always read latest value here
     const tempToken = localStorage.getItem("tempToken");
 
     if (!tempToken) {
@@ -30,23 +44,13 @@ export const useMFAVerifyController = () => {
       return;
     }
 
-    if (!code || code.length !== 6) {
-      setError("Please enter a valid 6-digit code.");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const res = await api.post(
-        "/auth/mfa/verify-login",
-        { token: code },
-        {
-          headers: { Authorization: `Bearer ${tempToken}` },
-        }
-      );
+      const res = await api.post("/auth/mfa/verify-login", code, {
+        headers: { Authorization: `Bearer ${tempToken}` },
+      });
 
-      // 🎉 Success
       localStorage.setItem("token", res.data.token);
       localStorage.removeItem("tempToken");
       auth?.login(res.data.token, res.data.email);
@@ -55,7 +59,6 @@ export const useMFAVerifyController = () => {
     } catch (err: any) {
       const message = err.response?.data?.message || "Invalid MFA code";
 
-      // 🔥 Handle expired tempToken
       if (
         message === "TEMP_TOKEN_EXPIRED" ||
         message === "Invalid temp token" ||
@@ -71,5 +74,13 @@ export const useMFAVerifyController = () => {
     setLoading(false);
   };
 
-  return { code, error, setCode, loading, handleVerify };
+  return {
+    error,
+    errors,
+    handleInput,
+    loading,
+    handleVerify,
+    register,
+    handleSubmit,
+  };
 };
