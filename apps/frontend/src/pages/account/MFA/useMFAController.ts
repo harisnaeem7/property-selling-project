@@ -6,6 +6,8 @@ export const useMFAController = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [success, setSuccess] = useState<string | null>("");
+  const [error, setError] = useState<string | null>("");
 
   const handleSetup = async () => {
     setLoading(true);
@@ -19,17 +21,28 @@ export const useMFAController = () => {
   };
 
   const handleVerify = async () => {
+    setSuccess(null);
+    setError(null);
     setVerifying(true);
     try {
       await verifyMFA(otp);
-      alert("MFA Enabled Successfully!");
-      // navigate("/dashboard"); // if using react-router
+      setSuccess("MFA Enabled Successfully!");
     } catch (err) {
-      alert("Invalid code. Try again.");
+      setError("Invalid code. Try again.");
       console.log(err);
     }
     setVerifying(false);
   };
 
-  return { handleSetup, handleVerify, qr, otp, loading, verifying, setOtp };
+  return {
+    handleSetup,
+    handleVerify,
+    qr,
+    otp,
+    loading,
+    verifying,
+    setOtp,
+    success,
+    error,
+  };
 };
