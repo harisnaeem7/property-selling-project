@@ -14,7 +14,7 @@ export const validateRequest = (DTO: ClassConstructor<any>) => {
         success: false,
         errors: errors.map((err) => ({
           field: err.property,
-          messages: err.constraints ? Object.values(err.constraints) : [],
+          messages: err.constraints ? Object.values(err.constraints)[0] : [],
         })),
       });
     }
