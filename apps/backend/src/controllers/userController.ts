@@ -15,5 +15,5 @@ export const UserController = async (req: AuthRequest, res: Response) => {
   );
   console.log(user);
 
-  return res.status(200).json({ message: "testing dashboard route!", user });
+  return res.status(200).json({ user });
 };

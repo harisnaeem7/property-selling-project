@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema<IUser>({
     required: true,
     description: "User Email",
     unique: true,
+    lowercase: true,
   },
   password: { type: String, required: true },
   role: { type: String, enum: ["admin", "seller", "buyer"], default: "buyer" },

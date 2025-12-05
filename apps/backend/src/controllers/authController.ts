@@ -77,7 +77,6 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body || {};
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       const isMatching = await bcrypt.compare(password, existingUser.password);
       const role = existingUser.role;
