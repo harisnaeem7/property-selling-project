@@ -8,6 +8,7 @@ import ForgotPassword from "../pages/account/forgotPassword";
 import { Reset } from "../pages/account/reset";
 import { MFASetup } from "../pages/account/MFA";
 import MFAVerifyLogin from "../pages/account/VerifyMFA";
+import { Sell } from "../pages/property/sell";
 
 const Routing = () => {
   return (
@@ -17,6 +18,9 @@ const Routing = () => {
         <Route path="register" element={<Register />} />
         <Route path="forgot" element={<ForgotPassword />} />
         <Route path="reset-password/:token" element={<Reset />} />
+      </Route>
+      <Route path="properties">
+        <Route path="selling" element={<Sell />} />
       </Route>
       <Route
         path="user"

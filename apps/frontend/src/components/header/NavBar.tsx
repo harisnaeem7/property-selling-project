@@ -18,7 +18,7 @@ import { useContext } from "react";
 
 const pages = [
   { name: "Profile", path: "/user/profile" },
-  { name: "Sell", path: "/sell" },
+  { name: "Sell", path: "/properties/selling" },
   { name: "Rent", path: "/rent" },
   { name: "New Build", path: "/new-build" },
   { name: "Login", path: "/account" },
