@@ -118,7 +118,7 @@ const Login = () => {
             <br />
             <Typography variant="body2">
               Don't have an account?{" "}
-              <NavLink to="register">Register Here</NavLink>
+              <NavLink to="register">Register Here </NavLink>
             </Typography>
           </form>
         </Box>
