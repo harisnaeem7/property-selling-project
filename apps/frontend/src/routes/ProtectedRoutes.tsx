@@ -11,9 +11,9 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     return <Navigate to="/auth/mfa-verify" replace />;
   }
 
-  if (!auth.isLoggedIn) {
-    return <Navigate to="/account" replace />;
-  }
+  // if (!auth.isLoggedIn) {
+  //   return <Navigate to="/account" replace />;
+  // }
 
   return children;
 };
