@@ -5,6 +5,7 @@ const connectDB = require("./db");
 import authRouter from "./routes/authRoutes";
 import { verifyToken } from "./middleware/protectedroutes";
 import userRoutes from "./routes/userRoutes";
+import dashboardRoute from "./routes/dashboard";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/user", userRoutes);
+app.use("/", dashboardRoute);
 
 const PORT = process.env.PORT || 5009;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
