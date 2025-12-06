@@ -1,6 +1,8 @@
 import { IsEmail, IsString, IsNotEmpty, MinLength } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class RegisterDTO {
+  @Transform(({ value }) => value.toLowerCase())
   @IsEmail({}, { message: "Please enter a valid email" })
   email: string = "";
 

@@ -1,11 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "../pages/account/register/index";
 import Login from "../pages/account/login";
-import Dashboard from "../pages/account/Dashboard";
+import Profile from "../pages/account/profile/Profile";
 import ProtectedRoute from "./ProtectedRoutes";
 import { Outlet } from "react-router-dom";
 import ForgotPassword from "../pages/account/forgotPassword";
 import { Reset } from "../pages/account/reset";
+import { MFASetup } from "../pages/account/MFA";
+import MFAVerifyLogin from "../pages/account/VerifyMFA";
+import { Sell } from "../pages/property/sell";
 
 const Routing = () => {
   return (
@@ -16,6 +19,9 @@ const Routing = () => {
         <Route path="forgot" element={<ForgotPassword />} />
         <Route path="reset-password/:token" element={<Reset />} />
       </Route>
+      <Route path="properties">
+        <Route path="selling" element={<Sell />} />
+      </Route>
       <Route
         path="user"
         element={
@@ -24,8 +30,10 @@ const Routing = () => {
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="profile/mfa-setup" element={<MFASetup />} />
       </Route>
+      <Route path="/auth/mfa-verify" element={<MFAVerifyLogin />} />
     </Routes>
   );
 };

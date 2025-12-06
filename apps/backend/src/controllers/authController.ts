@@ -11,7 +11,7 @@ const createToken = (id: string) => {
       id,
     },
     process.env.JWT_SECRET!,
-    { expiresIn: "2m" }
+    { expiresIn: "45m" }
   );
 
   return token;
@@ -77,7 +77,6 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body || {};
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       const isMatching = await bcrypt.compare(password, existingUser.password);
       const role = existingUser.role;
@@ -87,6 +86,19 @@ export const loginUser = async (req: Request, res: Response) => {
       if (!isMatching) {
         return res.status(401).json({ message: "Invalid email or password." });
       } else {
+        if (existingUser.isMfaEnabled) {
+          const tempToken = jwt.sign(
+            { id: existingUser._id, mfaStage: true },
+            process.env.JWT_SECRET!,
+            { expiresIn: "15m" } // short-lived token
+          );
+          return res.json({
+            message: "MFA required",
+            mfaRequired: true,
+            tempToken,
+            userId: existingUser._id,
+          });
+        }
         const token = createToken(existingUser._id.toString());
         return res.status(200).json({
           message: "User found",

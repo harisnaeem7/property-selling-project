@@ -7,8 +7,10 @@ export interface IUser extends Document {
   role: "admin" | "seller" | "buyer";
   phone?: string;
   createdAt: Date;
-  resetPasswordToken?: String | null;
+  resetPasswordToken?: string | null;
   resetPasswordExpires?: Date | null;
+  googleAuthSecret?: string;
+  isMfaEnabled: boolean;
 }
 const userSchema = new mongoose.Schema<IUser>({
   firstName: { type: String, required: true, description: "First Name" },
@@ -18,6 +20,7 @@ const userSchema = new mongoose.Schema<IUser>({
     required: true,
     description: "User Email",
     unique: true,
+    lowercase: true,
   },
   password: { type: String, required: true },
   role: { type: String, enum: ["admin", "seller", "buyer"], default: "buyer" },
@@ -25,6 +28,11 @@ const userSchema = new mongoose.Schema<IUser>({
   createdAt: { type: Date, default: Date.now },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
+  googleAuthSecret: { type: String },
+  isMfaEnabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model<IUser>("User", userSchema);
