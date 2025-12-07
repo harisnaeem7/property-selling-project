@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
 import api from "../api/api";
-import { CookieSharp } from "@mui/icons-material";
 
 type AuthState = {
   isLoggedIn: boolean;
@@ -27,21 +26,20 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [verified, setVerified] = useState<boolean>(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    //const user = localStorage.getItem("user") || "null";
 
     const fetchUser = async () => {
       try {
-        const { data } = await api.get("/user/me");
+        const res = await api.get("/user/me");
 
         if (token) {
           setAuth({
             isLoggedIn: true,
             token,
-            user: data.user,
+            user: res.data.user,
           });
         }
-      } catch {
-        console.log("error fetching data!");
+      } catch (err) {
+        console.log("error fetching data!", err);
       }
     };
 
@@ -71,6 +69,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const verify = () => {
     setVerified(true);
   };
+
+  console.log(auth);
 
   return (
     <AuthContext.Provider value={{ ...auth, login, logout, verify, verified }}>
