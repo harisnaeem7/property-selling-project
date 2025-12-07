@@ -7,25 +7,31 @@ import { Grid } from "@mui/material";
 const Profile = () => {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
+  //localStorage.clear();
 
   return (
     <>
-      <h1>Profile</h1>
-
-      {auth?.verified ? (
-        <Grid
-          container
-          sx={{ justifyContent: "center", alignItems: "center" }}
-          spacing={{ xs: 1, md: 1 }}
-          columns={{ xs: 2, sm: 2, md: 2 }}
-        >
-          <CheckCircleOutlineIcon sx={{ color: "green" }} />
-          <p>MFA enabled</p>
-        </Grid>
+      {auth?.loading ? (
+        <p>Loading...</p>
       ) : (
-        <button onClick={() => navigate("/user/profile/mfa-setup")}>
-          Setup MFA
-        </button>
+        <>
+          <h1>Profile</h1>
+          {auth?.verified ? (
+            <Grid
+              container
+              sx={{ justifyContent: "center", alignItems: "center" }}
+              spacing={{ xs: 1, md: 1 }}
+              columns={{ xs: 2, sm: 2, md: 2 }}
+            >
+              <CheckCircleOutlineIcon sx={{ color: "green" }} />
+              <p>MFA enabled</p>
+            </Grid>
+          ) : (
+            <button onClick={() => navigate("/user/profile/mfa-setup")}>
+              Setup MFA
+            </button>
+          )}
+        </>
       )}
       <Outlet />
     </>
