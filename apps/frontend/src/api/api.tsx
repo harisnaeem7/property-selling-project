@@ -10,6 +10,10 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
+
+  if (!config.headers["Content-Type"]) {
+    config.headers["Content-Type"] = "application/json";
+  }
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -24,7 +28,7 @@ export const AuthHOC = () => {
   useEffect(() => {
     const responseInterceptor = api.interceptors.response.use(
       (response) => {
-        return response.data;
+        return response;
       },
       (err) => {
         if (err.response && err.response.status === 401) {

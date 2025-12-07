@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
-import api from "../api/api";
-import { CookieSharp } from "@mui/icons-material";
+import { userMe } from "../api/auth";
 
 type AuthState = {
   isLoggedIn: boolean;
@@ -9,10 +8,11 @@ type AuthState = {
 };
 
 interface AuthContextType extends AuthState {
-  login: (token: string, user: any) => void;
+  login: (token: string, user: string) => void;
   logout: () => void;
   verify: () => void;
   verified: boolean;
+  loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,23 +25,28 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [verified, setVerified] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    //const user = localStorage.getItem("user") || "null";
 
     const fetchUser = async () => {
       try {
-        const { data } = await api.get("/user/me");
+        const res = await userMe();
+        if (!token) {
+          setLoading(false);
+        }
 
         if (token) {
           setAuth({
             isLoggedIn: true,
             token,
-            user: data.user,
+            user: res.data.user,
           });
         }
-      } catch {
-        console.log("error fetching data!");
+      } catch (err) {
+        console.log("error fetching data!", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -73,7 +78,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ ...auth, login, logout, verify, verified }}>
+    <AuthContext.Provider
+      value={{ ...auth, login, logout, verify, loading, verified }}
+    >
       {children}
     </AuthContext.Provider>
   );
