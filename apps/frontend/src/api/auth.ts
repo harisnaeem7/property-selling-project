@@ -33,3 +33,7 @@ export const dashboardApi = async () => {
   const response = await api.get(`/dashboard`);
   return response;
 };
+export const userMe = async () => {
+  const response = await api.get(`/user/me`);
+  return response;
+};
