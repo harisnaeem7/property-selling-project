@@ -27,22 +27,19 @@ export const useLoginController = () => {
     setSuccessMessage(null);
     try {
       const response = await LogInUser(data);
-      console.log(response);
-
-      if (response.mfaRequired) {
-        localStorage.setItem("tempToken", response.tempToken);
+      if (response.data.mfaRequired) {
+        localStorage.setItem("tempToken", response.data.tempToken);
         setSuccessMessage("MFA required. Please enter your 6-digit code.");
         navigate("/auth/mfa-verify", { replace: true });
         return;
       }
 
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", response.email);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", response.data.email);
       setSuccessMessage("Logged in successfully!");
-      auth?.login(response.token, response.email);
+      auth?.login(response.data.token, response.data.email);
       navigate("/user/profile", { replace: true });
     } catch (err: any) {
-      console.log(err.response?.data?.message);
       if (err.response?.data?.message) {
         setBackendError(err.response?.data?.message);
       } else {
