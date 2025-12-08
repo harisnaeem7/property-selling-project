@@ -7,6 +7,7 @@ export interface IProperty {
   propertyType: string;
   bedrooms: number;
   bathrooms: number;
+  utilities: "water" | "heating" | "electricity" | "none";
   address: string;
   city: string;
   description: string;
@@ -53,6 +54,13 @@ export const PropertySchema = new mongoose.Schema<IProperty>(
 
     bathrooms: {
       type: Number,
+      required: true,
+    },
+
+    utilities: {
+      type: String,
+      enum: ["water", "heating", "electricity", "none"],
+      default: "none",
       required: true,
     },
 
