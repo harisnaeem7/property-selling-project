@@ -1,38 +1,29 @@
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { usePropertyDetailController } from "./usePropertyDetailController";
 
 export const PropertyDetail = () => {
   const { register, errors } = usePropertyDetailController();
+  const fields = ["title", "price", "bedrooms", "bathrooms"];
+
   return (
-    <Box>
-      <h1>Property details</h1>
-      <Grid container spacing={2}>
-        <Grid size={6}>
+    <Box maxWidth="sm" margin="0 auto" textAlign="left">
+      <br></br>
+      <br></br>
+      {fields.map((item) => {
+        return (
           <TextField
             fullWidth
-            size="small"
+            sx={{ margin: "10px 0px" }}
+            size="medium"
             id="outlined-basic"
-            label="Title"
+            label={item}
             variant="outlined"
-            {...register("title")}
-            error={!!errors.title}
+            {...register(`${item}`)}
+            error={!!errors.item}
             //  helperText={errors.title?.message}
           />
-        </Grid>
-        <Grid size={6}>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="$"
-            id="outlined-basic"
-            label="Price"
-            variant="outlined"
-            {...register("price")}
-            error={!!errors.price}
-            //helperText={errors.price?.message}
-          />
-        </Grid>
-      </Grid>
+        );
+      })}
     </Box>
   );
 };
