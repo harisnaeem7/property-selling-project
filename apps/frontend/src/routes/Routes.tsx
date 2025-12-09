@@ -9,6 +9,7 @@ import { Reset } from "../pages/account/reset";
 import { MFASetup } from "../pages/account/MFA";
 import MFAVerifyLogin from "../pages/account/VerifyMFA";
 import { Sell } from "../pages/property/sell";
+import { CreateProperty } from "../pages/account/property/createProperty";
 
 const Routing = () => {
   return (
@@ -32,6 +33,16 @@ const Routing = () => {
       >
         <Route path="profile" element={<Profile />} />
         <Route path="profile/mfa-setup" element={<MFASetup />} />
+      </Route>
+      <Route
+        path="property"
+        element={
+          <ProtectedRoute>
+            <Outlet />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="create-property" element={<CreateProperty />} />
       </Route>
       <Route path="/auth/mfa-verify" element={<MFAVerifyLogin />} />
     </Routes>
