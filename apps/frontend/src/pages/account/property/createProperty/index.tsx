@@ -6,11 +6,11 @@ export const CreateProperty = () => {
   const methods = useForm({
     defaultValues: {
       title: "",
-      price: 0,
-      purpose: "",
-      propertyType: "",
-      bedrooms: 0,
-      bathrooms: 0,
+      price: null,
+      purpose: "sell",
+      propertyType: "house",
+      bedrooms: null,
+      bathrooms: null,
       utilities: "",
       address: "",
       city: "",

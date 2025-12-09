@@ -72,6 +72,9 @@ export default function HorizontalLinearStepper() {
         <React.Fragment>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }}>{forms[activeStep]}</Box>
+            </Box>
+            <Box>
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
@@ -80,7 +83,6 @@ export default function HorizontalLinearStepper() {
               >
                 Back
               </Button>
-              <Box sx={{ flex: "1 1 auto" }}>{forms[activeStep]}</Box>
 
               <Button onClick={handleNext}>
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
