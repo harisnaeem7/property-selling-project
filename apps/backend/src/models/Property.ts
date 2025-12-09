@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 export interface IProperty {
-  ownerId: mongoose.Types.ObjectId | string;
+  ownerId?: mongoose.Types.ObjectId | string;
   title: string;
   price: number;
   purpose: "rent" | "sale";
@@ -17,12 +17,12 @@ export interface IProperty {
   updatedAt?: Date;
 }
 
-export const PropertySchema = new mongoose.Schema<IProperty>(
+export const propertySchema = new mongoose.Schema<IProperty>(
   {
     ownerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
 
     title: {
@@ -94,3 +94,5 @@ export const PropertySchema = new mongoose.Schema<IProperty>(
     timestamps: true,
   }
 );
+
+export const Property = mongoose.model<IProperty>("Property", propertySchema);
