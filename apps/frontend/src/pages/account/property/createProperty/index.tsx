@@ -13,7 +13,7 @@ export const CreateProperty = () => {
       bathrooms: null,
       utilities: "",
       address: "",
-      city: "",
+      city: "calgary",
       description: "",
       images: [""],
       status: "",
