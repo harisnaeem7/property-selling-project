@@ -1,22 +1,19 @@
 import { useForm, FormProvider } from "react-hook-form";
 import HorizontalLinearStepper from "./stepper";
 import { Box, Container } from "@mui/material";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { propertySchema } from "./createProperty.schema";
 
 export const CreateProperty = () => {
   const methods = useForm({
+    resolver: yupResolver(propertySchema),
     defaultValues: {
       title: "",
-      price: null,
       purpose: "sell",
-      propertyType: "house",
-      bedrooms: null,
-      bathrooms: null,
-      utilities: "",
       address: "",
       city: "calgary",
       description: "",
       images: [""],
-      status: "",
     },
   });
   return (

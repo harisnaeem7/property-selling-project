@@ -17,6 +17,18 @@ const steps = [
 ];
 
 export default function HorizontalLinearStepper() {
+  const stepFields: Record<number, string[]> = {
+    1: [
+      "title",
+      "purpose",
+      "price",
+      "propertyType",
+      "bedrooms",
+      "bathrooms",
+      "utilities",
+    ],
+    2: ["description", "address", "city"],
+  };
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const forms = [
@@ -24,21 +36,25 @@ export default function HorizontalLinearStepper() {
     <PropertyDescription />,
     <ContactDetails />,
   ];
-  const { handleSubmit, onSubmit } = useCreatePropertyController();
+
+  const { handleSubmit, onSubmit, trigger } = useCreatePropertyController();
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+  const handleNext = async () => {
+    const isValid = await trigger(stepFields[activeStep + 1]);
+    console.log(activeStep);
+    if (isValid) {
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
     }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -85,8 +101,13 @@ export default function HorizontalLinearStepper() {
               </Button>
 
               <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                {activeStep === steps.length - 1 ? "" : "Next"}
               </Button>
+              {activeStep === steps.length - 1 ? (
+                <Button type="submit">Submit</Button>
+              ) : (
+                <></>
+              )}
             </Box>
           </form>
         </React.Fragment>

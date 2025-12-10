@@ -1,11 +1,11 @@
 import { useFormContext } from "react-hook-form";
 
 export const useCreatePropertyController = () => {
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit, trigger } = useFormContext();
 
-  const onSubmit = () => {
-    return;
+  const onSubmit = (data: object) => {
+    return console.log("data", data);
   };
 
-  return { handleSubmit, onSubmit };
+  return { handleSubmit, onSubmit, trigger };
 };

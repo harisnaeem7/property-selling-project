@@ -14,6 +14,8 @@ export const PropertyDescription = () => {
           multiline
           fullWidth
           rows={8}
+          error={!!errors.description}
+          helperText={errors.description?.message as string}
         />
         <br></br>
         <br></br>
@@ -25,8 +27,8 @@ export const PropertyDescription = () => {
           label="address"
           variant="outlined"
           {...register("address")}
-          error={!!errors.item}
-          helperText={errors.item?.message as string}
+          error={!!errors.address}
+          helperText={errors.address?.message as string}
         />
         <br></br>
         <br></br>
