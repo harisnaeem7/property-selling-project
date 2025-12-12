@@ -4,7 +4,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
 import { PropertyDetail } from "./forms/propertyDetail";
 import { PropertyDescription } from "./forms/propertyDescription";
 import { ContactDetails } from "./forms/contactDetails";
@@ -28,6 +28,7 @@ export default function HorizontalLinearStepper() {
       "utilities",
     ],
     2: ["description", "address", "city"],
+    3: ["email", "phone"],
   };
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
@@ -44,7 +45,8 @@ export default function HorizontalLinearStepper() {
   };
 
   const handleNext = async () => {
-    const isValid = await trigger(stepFields[activeStep + 1]);
+    console.log("testss");
+    const isValid = await trigger(stepFields[activeStep + 1] as any);
     console.log(activeStep);
     if (isValid) {
       let newSkipped = skipped;
@@ -61,13 +63,9 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={1} alternativeLabel>
+      <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
@@ -81,7 +79,6 @@ export default function HorizontalLinearStepper() {
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
           </Box>
         </React.Fragment>
       ) : (
@@ -99,10 +96,12 @@ export default function HorizontalLinearStepper() {
               >
                 Back
               </Button>
+              {activeStep === steps.length - 1 ? (
+                <></>
+              ) : (
+                <Button onClick={handleNext}>Next</Button>
+              )}
 
-              <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "" : "Next"}
-              </Button>
               {activeStep === steps.length - 1 ? (
                 <Button type="submit">Submit</Button>
               ) : (
