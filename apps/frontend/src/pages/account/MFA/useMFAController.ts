@@ -26,7 +26,7 @@ export const useMFAController = () => {
 
     try {
       const res = await setupMFA();
-      setQr(res.qrCode);
+      setQr(res.data.qrCode);
     } catch (err) {
       console.log(err);
     }
