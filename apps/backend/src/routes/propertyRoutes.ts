@@ -9,6 +9,6 @@ export const propertyRoutes = express.Router();
 propertyRoutes.post(
   "/create-property",
   verifyToken,
-  validateRequest(createPropertyDTO),
+  //  validateRequest(createPropertyDTO),
   createProperty
 );

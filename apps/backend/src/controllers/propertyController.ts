@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Property } from "../models/Property";
 
 export const createProperty = async (req: Request, res: Response) => {
+  console.log(req.body);
   const {
     // ownerId,
     title,
@@ -20,22 +21,22 @@ export const createProperty = async (req: Request, res: Response) => {
     updatedAt,
   } = req.body || {};
 
-  if (
-    !title ||
-    !price ||
-    !purpose ||
-    !propertyType ||
-    !bedrooms ||
-    !bathrooms ||
-    !utilities ||
-    !address ||
-    !city ||
-    !description ||
-    !images ||
-    !status
-  ) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
+  // if (
+  //   !title ||
+  //   !price ||
+  //   !purpose ||
+  //   !propertyType ||
+  //   !bedrooms ||
+  //   !bathrooms ||
+  //   !utilities ||
+  //   !address ||
+  //   !city ||
+  //   !description ||
+  //   !images ||
+  //   !status
+  // ) {
+  //   return res.status(400).json({ message: "Missing required fields" });
+  // }
 
   try {
     const property = await Property.create({
