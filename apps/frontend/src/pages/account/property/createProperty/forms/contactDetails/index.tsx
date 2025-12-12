@@ -17,8 +17,8 @@ export const ContactDetails = () => {
               label={item}
               variant="outlined"
               {...register(`${item}`)}
-              error={!!errors.item}
-              helperText={errors.item?.message as string}
+              error={!!errors[item]}
+              helperText={errors[item]?.message as string}
             />
           );
         })}
