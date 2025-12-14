@@ -37,12 +37,12 @@ export class createPropertyDTO {
   @IsString()
   @IsNotEmpty({ message: "Description is required" })
   description: string = "";
-  @IsArray()
-  @IsString({ each: true })
-  @Matches(/^https:\/\/.+\.(jpg|jpeg|png|webp)$/i, {
-    each: true,
-    message:
-      "Each image must be a valid image URL ending in .jpg, .jpeg, .png or .webp",
-  })
-  images!: string[];
+  // @IsArray()
+  // @IsString({ each: true })
+  // @Matches(/^https:\/\/.+\.(jpg|jpeg|png|webp)$/i, {
+  //   each: true,
+  //   message:
+  //     "Each image must be a valid image URL ending in .jpg, .jpeg, .png or .webp",
+  // })
+  // images!: string[];
 }

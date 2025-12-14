@@ -3,11 +3,11 @@ export interface IProperty {
   ownerId?: mongoose.Types.ObjectId | string;
   title: string;
   price: number;
-  purpose: "rent" | "sale";
+  purpose: string;
   propertyType: string;
   bedrooms: number;
   bathrooms: number;
-  utilities: "water" | "heating" | "electricity" | "none";
+  utilities: string;
   address: string;
   city: string;
   description: string;
@@ -38,7 +38,6 @@ export const propertySchema = new mongoose.Schema<IProperty>(
 
     purpose: {
       type: String,
-      enum: ["rent", "sale"],
       required: true,
     },
 
@@ -59,7 +58,6 @@ export const propertySchema = new mongoose.Schema<IProperty>(
 
     utilities: {
       type: String,
-      enum: ["water", "heating", "electricity", "none"],
       default: "none",
       required: true,
     },

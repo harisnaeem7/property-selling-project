@@ -17,7 +17,8 @@ export const usePropertDescriptionController = () => {
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext();
   const cities = CANADA_CITIES;
-  return { cities, register, errors, VisuallyHiddenInput };
+  return { cities, register, errors, VisuallyHiddenInput, setValue };
 };

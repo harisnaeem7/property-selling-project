@@ -8,12 +8,7 @@ export const CreateProperty = () => {
   const methods = useForm({
     resolver: yupResolver(propertySchema),
     defaultValues: {
-      title: "",
       purpose: "sell",
-      address: "",
-      city: "calgary",
-      description: "",
-      images: [""],
     },
   });
   return (

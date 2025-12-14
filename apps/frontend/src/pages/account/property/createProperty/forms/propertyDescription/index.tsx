@@ -1,11 +1,24 @@
 import { usePropertDescriptionController } from "./usePropertyDescriptionController";
 import { NativeSelect, InputLabel, Box, TextField } from "@mui/material";
 export const PropertyDescription = () => {
-  const { register, cities, errors } = usePropertDescriptionController();
+  const { register, cities, errors, setValue } =
+    usePropertDescriptionController();
 
   return (
     <>
       <Box maxWidth="sm" margin="0 auto" textAlign="left">
+        <br></br>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={(e) => {
+            const files = Array.from(e.target.files || []);
+            setValue("images", files, { shouldValidate: true });
+          }}
+        />
+
+        <br></br>
         <br></br>
         <TextField
           {...register("description")}

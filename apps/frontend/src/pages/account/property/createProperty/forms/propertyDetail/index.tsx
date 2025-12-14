@@ -2,7 +2,7 @@ import { Box, TextField, NativeSelect, Grid, InputLabel } from "@mui/material";
 import { usePropertyDetailController } from "./usePropertyDetailController";
 
 export const PropertyDetail = () => {
-  const { register, errors, fields, selectFields, capitalize } =
+  const { register, errors, fields, selectFields, capitalize, numericFields } =
     usePropertyDetailController();
 
   return (
@@ -16,6 +16,9 @@ export const PropertyDetail = () => {
             size="medium"
             id="outlined-basic"
             label={item}
+            inputMode={numericFields.includes(item) ? "numeric" : "text"}
+            type={numericFields.includes(item) ? "number" : "text"}
+            inputProps={numericFields.includes(item) ? { min: 0 } : undefined}
             variant="outlined"
             {...register(`${item}`)}
             error={!!errors[item]}

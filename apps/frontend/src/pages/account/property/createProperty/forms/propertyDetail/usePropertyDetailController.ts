@@ -27,6 +27,7 @@ export const usePropertyDetailController = () => {
     },
   ];
   const purposes = ["sell", "rent"];
+  const numericFields = ["price", "bedrooms", "bathrooms"];
 
   const {
     register,
@@ -42,5 +43,6 @@ export const usePropertyDetailController = () => {
     purposes,
     selectFields,
     capitalize,
+    numericFields,
   };
 };
