@@ -38,14 +38,14 @@ export const userMe = async () => {
   return response;
 };
 
-// export const createProperty = async (data: any) => {
-//   const resposne = await api.post(`/property/create-property`, data, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   });
-//   return resposne;
-// };
-
 export const createProperty = async (data: any) => {
-  const resposne = await api.post(`/property/create-property`, data);
+  const resposne = await api.post(`/property/create-property`, data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return resposne;
 };
+
+// export const createProperty = async (data: any) => {
+//   const resposne = await api.post(`/property/create-property`, data);
+//   return resposne;
+// };
