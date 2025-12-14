@@ -64,7 +64,7 @@ export const createProperty = async (req: Request, res: Response) => {
 
       uploadedImageKeys.push(fileKey);
     }
-
+    console.log(uploadedImageKeys);
     const property = await Property.create({
       //ownerId,
       title,
@@ -77,7 +77,7 @@ export const createProperty = async (req: Request, res: Response) => {
       address,
       city,
       description,
-      images,
+      images: uploadedImageKeys,
       status,
       createdAt,
       updatedAt,
@@ -87,13 +87,17 @@ export const createProperty = async (req: Request, res: Response) => {
       images: uploadedImageKeys,
       body: req.body,
     });
-  } catch (error: any) {
-    console.error("FULL S3 ERROR:", JSON.stringify(error, null, 2));
+  } catch (err: any) {
+    console.error("🔥 FULL S3 ERROR 🔥");
+    console.error(err);
+    console.error("NAME:", err.name);
+    console.error("MESSAGE:", err.message);
+    console.error("METADATA:", err.$metadata);
 
-    return res.status(405).json({
-      message: "S3 upload failed",
-      error: error?.name,
-      code: error?.$metadata?.httpStatusCode,
+    res.status(500).json({
+      name: err.name,
+      message: err.message,
+      metadata: err.$metadata,
     });
   }
 
