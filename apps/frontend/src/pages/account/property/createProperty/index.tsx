@@ -3,10 +3,9 @@ import HorizontalLinearStepper from "./stepper";
 import { Box, Container } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { propertySchema } from "./createProperty.schema";
-import { type CreatePropertyForm } from "./input.types";
 
 export const CreateProperty = () => {
-  const methods = useForm<CreatePropertyForm>({
+  const methods = useForm({
     resolver: yupResolver(propertySchema),
     defaultValues: {
       purpose: "sell",

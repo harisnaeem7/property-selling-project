@@ -6,15 +6,18 @@ export const propertySchema = yup.object({
   purpose: yup.string().required("Purpose is required"),
   price: yup
     .number()
+    .typeError("Price is required")
     .required("Price is required")
     .min(0, "Price cannot be negative"),
   propertyType: yup.string().required("Property type is required"),
   bedrooms: yup
     .number()
+    .typeError("Number of bedrooms required")
     .required("Number of bedrooms required")
     .min(0, "Please enter a valid number (must be positive)"),
   bathrooms: yup
     .number()
+    .typeError("Number of bathrooms required")
     .required("Number of bathrooms required")
     .min(0, "Please enter a valid number (must be positive)"),
   utilities: yup
@@ -33,5 +36,8 @@ export const propertySchema = yup.object({
 
   // Step 3
   email: yup.string().email().required("Please enter a valid email"),
-  phone: yup.string().required("Please enter a valid phone number"),
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .matches(/^[0-9]{10,15}$/, "Phone number must be between 10 and 15 digits"),
 });
