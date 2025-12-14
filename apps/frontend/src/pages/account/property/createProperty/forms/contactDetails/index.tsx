@@ -2,7 +2,8 @@ import { Box, TextField } from "@mui/material";
 import { useContactDetailsController } from "./useContactDetailsController";
 
 export const ContactDetails = () => {
-  const { fields, register, errors } = useContactDetailsController();
+  const { fields, register, errors, customField } =
+    useContactDetailsController();
   return (
     <Box maxWidth="sm" margin="0 auto" textAlign="left">
       <br></br>
@@ -11,13 +12,16 @@ export const ContactDetails = () => {
           return (
             <TextField
               fullWidth
-              sx={{ margin: "10px 0px", textTransform: "capitalize" }}
+              sx={{ margin: "10px 0" }}
               size="medium"
-              id="outlined-basic"
               label={item}
+              type={customField.includes(item) ? "tel" : "text"}
               variant="outlined"
-              {...register(`${item}`)}
+              {...register(item)}
               error={!!errors[item]}
+              inputProps={{
+                inputMode: customField.includes(item) ? "numeric" : "text",
+              }}
               helperText={errors[item]?.message as string}
             />
           );
