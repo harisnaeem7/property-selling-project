@@ -3,11 +3,13 @@ import { Property } from "../models/Property";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "../utils/s3";
 import { v4 as uuid } from "uuid";
+interface AuthRequest extends Request {
+  user?: { id: string };
+}
 
-export const createProperty = async (req: Request, res: Response) => {
-  console.log(req.body);
+export const createProperty = async (req: AuthRequest, res: Response) => {
   const {
-    // ownerId,
+    ownerId,
     title,
     price,
     purpose,
@@ -40,8 +42,6 @@ export const createProperty = async (req: Request, res: Response) => {
     !address ||
     !city ||
     !description
-    // !images ||
-    // !status
   ) {
     return res.status(400).json({ message: "Missing required fields" });
   }
@@ -64,9 +64,8 @@ export const createProperty = async (req: Request, res: Response) => {
 
       uploadedImageKeys.push(fileKey);
     }
-    console.log(uploadedImageKeys);
     const property = await Property.create({
-      //ownerId,
+      ownerId: req.user?.id,
       title,
       price,
       purpose,
@@ -82,42 +81,12 @@ export const createProperty = async (req: Request, res: Response) => {
       createdAt,
       updatedAt,
     });
-    return res.status(201).json({
-      message: "Images uploaded successfully",
-      images: uploadedImageKeys,
-      body: req.body,
+    return res.status(200).json({
+      message: "Property successfully created!",
     });
-  } catch (err: any) {
-    console.error("🔥 FULL S3 ERROR 🔥");
-    console.error(err);
-    console.error("NAME:", err.name);
-    console.error("MESSAGE:", err.message);
-    console.error("METADATA:", err.$metadata);
-
-    res.status(500).json({
-      name: err.name,
-      message: err.message,
-      metadata: err.$metadata,
+  } catch (err) {
+    res.status(400).json({
+      message: err,
     });
   }
-
-  return res.status(200).json({ message: "property created successfully!" });
-};
-
-export const testUpload = (req: Request, res: Response) => {
-  console.log("BODY:", req.body);
-  console.log("FILES:", req.files);
-
-  const files = req.files as Express.Multer.File[];
-
-  return res.json({
-    message: "Upload received",
-    body: req.body,
-    fileCount: files?.length || 0,
-    files: files?.map((file) => ({
-      originalName: file.originalname,
-      mimeType: file.mimetype,
-      size: file.size,
-    })),
-  });
 };
