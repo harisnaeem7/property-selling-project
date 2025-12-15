@@ -5,12 +5,6 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuid } from "uuid";
 
 export const generatePresignedUrl = async (req: Request, res: Response) => {
-  console.log("Loaded Credentials:", {
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretKeyLength: process.env.AWS_SECRET_ACCESS_KEY?.length,
-  });
-
   try {
     const { fileType } = req.query;
 
