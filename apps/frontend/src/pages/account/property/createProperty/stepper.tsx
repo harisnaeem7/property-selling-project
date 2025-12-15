@@ -4,7 +4,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
+import { Alert, Grid } from "@mui/material";
 import { PropertyDetail } from "./forms/propertyDetail";
 import { PropertyDescription } from "./forms/propertyDescription";
 import { ContactDetails } from "./forms/contactDetails";
@@ -15,7 +15,6 @@ const steps = [
   "Location and Description",
   "Contact Details",
 ];
-
 export default function HorizontalLinearStepper() {
   const stepFields: Record<number, string[]> = {
     1: [
@@ -27,7 +26,7 @@ export default function HorizontalLinearStepper() {
       "bathrooms",
       "utilities",
     ],
-    2: ["description", "address", "city"],
+    2: ["images", "description", "address", "city"],
     3: ["email", "phone"],
   };
   const [activeStep, setActiveStep] = React.useState(0);
@@ -38,16 +37,16 @@ export default function HorizontalLinearStepper() {
     <ContactDetails />,
   ];
 
-  const { handleSubmit, onSubmit, trigger } = useCreatePropertyController();
+  const { handleSubmit, onSubmit, trigger, successMessage } =
+    useCreatePropertyController();
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
   };
 
   const handleNext = async () => {
-    console.log("testss");
     const isValid = await trigger(stepFields[activeStep + 1] as any);
-    console.log(activeStep);
+
     if (isValid) {
       let newSkipped = skipped;
       if (isStepSkipped(activeStep)) {
@@ -65,24 +64,26 @@ export default function HorizontalLinearStepper() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-          </Box>
-        </React.Fragment>
+      {successMessage ? (
+        <Box sx={{ width: "50%", margin: "0 auto" }}>
+          <Alert sx={{ justifyContent: "center" }} severity="success">
+            {successMessage}
+          </Alert>
+          <br></br>
+          <Grid container spacing={2} sx={{ justifyContent: "center" }}>
+            <Button variant="contained">Home</Button>
+            <Button variant="contained">All Properties</Button>
+          </Grid>
+        </Box>
       ) : (
         <React.Fragment>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Box sx={{ flex: "1 1 auto" }}>{forms[activeStep]}</Box>

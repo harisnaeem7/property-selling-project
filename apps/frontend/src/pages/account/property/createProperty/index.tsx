@@ -7,6 +7,7 @@ import { propertySchema } from "./createProperty.schema";
 export const CreateProperty = () => {
   const methods = useForm({
     resolver: yupResolver(propertySchema),
+    mode: "onChange",
     defaultValues: {
       purpose: "sell",
     },
