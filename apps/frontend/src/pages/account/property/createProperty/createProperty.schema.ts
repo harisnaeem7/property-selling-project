@@ -32,7 +32,15 @@ export const propertySchema = yup.object({
     .min(10, "Description  must be at least 10 characters"),
   address: yup.string().required("Please enter property address"),
   city: yup.string().required("Please select city").trim(),
-  images: yup.array().of(yup.mixed<File>().required("Image is required")),
+  images: yup
+    .array()
+    .of(yup.mixed<File>().required())
+    .min(1, "At least one image is required")
+    .test(
+      "fileSize",
+      "Each image must be less than 5MB",
+      (files) => !files || files.every((file) => file.size <= 5 * 1024 * 1024)
+    ),
 
   // Step 3
   email: yup.string().email().required("Please enter a valid email"),
