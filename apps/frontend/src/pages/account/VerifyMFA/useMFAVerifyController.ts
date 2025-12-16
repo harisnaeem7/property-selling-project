@@ -55,7 +55,7 @@ export const useMFAVerifyController = () => {
       localStorage.removeItem("tempToken");
       auth?.login(res.data.token, res.data.email);
 
-      navigate("/user/profile", { replace: true });
+      navigate("/", { replace: true });
     } catch (err: any) {
       const message = err.response?.data?.message || "Invalid MFA code";
 
