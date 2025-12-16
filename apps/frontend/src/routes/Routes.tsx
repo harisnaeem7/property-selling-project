@@ -10,10 +10,12 @@ import { MFASetup } from "../pages/account/MFA";
 import MFAVerifyLogin from "../pages/account/VerifyMFA";
 import { Sell } from "../pages/property/sell";
 import { CreateProperty } from "../pages/account/property/createProperty";
+import { LandingPage } from "../pages/landingPage";
 
 const Routing = () => {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />}></Route>
       <Route path="account">
         <Route index element={<Login />} />
         <Route path="register" element={<Register />} />
