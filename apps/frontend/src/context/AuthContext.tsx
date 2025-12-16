@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
 import { userMe } from "../api/auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 type AuthState = {
   isLoggedIn: boolean;
@@ -26,6 +27,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [verified, setVerified] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -65,12 +67,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    localStorage.clear();
+    console.log("called?");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setAuth({
       isLoggedIn: false,
       token: null,
       user: null,
     });
+    navigate("/account");
   };
 
   const verify = () => {
