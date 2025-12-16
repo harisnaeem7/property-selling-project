@@ -42,7 +42,7 @@ export const useLoginController = () => {
       setSuccessMessage("Logged in successfully!");
 
       auth?.login(token || "", user || "");
-      navigate("/user/profile", { replace: true });
+      navigate("/", { replace: true });
     } catch (err: any) {
       if (err.response?.data?.message) {
         setBackendError(err.response?.data?.message);
