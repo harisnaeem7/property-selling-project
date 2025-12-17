@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
 import { userMe } from "../api/auth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type AuthState = {
   isLoggedIn: boolean;
@@ -30,7 +30,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    const user = localStorage.getItem("user");
+    if (user) {
+      setAuth({ isLoggedIn: true, token: token, user: user });
+    }
     const fetchUser = async () => {
       try {
         const res = await userMe();
