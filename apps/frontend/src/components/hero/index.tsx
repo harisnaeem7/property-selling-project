@@ -1,5 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import heroImage from "../../../public/hero-banner.jpg";
+import { TypeAnimation } from "react-type-animation";
 
 type HeroProps = {
   image: string;
@@ -38,16 +39,28 @@ export const Hero = () => {
           px: 2,
         }}
       >
-        {/* <Typography variant="h3" fontWeight={700}>
-          {title}
+        <Typography variant="h3" fontWeight={700}>
+          Everythin you need to
         </Typography>
 
-        {subtitle && (
-          <Typography variant="h6" sx={{ mt: 2, opacity: 0.9 }}>
-            {subtitle}
-          </Typography>
-        )} */}
-
+        <TypeAnimation
+          preRenderFirstString={true}
+          sequence={[
+            500,
+            "Find Your Dream Home", // initially rendered starting point
+            1000,
+            "Sell At The Right Price",
+            1000,
+            "Rent Without Stress",
+            1000,
+          ]}
+          speed={50}
+          style={{ fontSize: "2em" }}
+          repeat={Infinity}
+        />
+      </Box>
+      <br></br>
+      <Box>
         <Button variant="contained" sx={{ mt: 4 }} size="large">
           Explore
         </Button>
