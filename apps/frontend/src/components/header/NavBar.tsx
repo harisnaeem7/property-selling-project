@@ -8,26 +8,32 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
-
+import logo from "../../../public/logo.png";
+import { Grid } from "@mui/material";
 const pages = [
-  { name: "Profile", path: "/user/profile" },
+  { name: "Home", path: "/" },
+  { name: "Buy", path: "/properties" },
   { name: "Sell", path: "/properties/selling" },
   { name: "Rent", path: "/rent" },
   { name: "New Build", path: "/new-build" },
-  { name: "Login", path: "/account" },
-  { name: "Sign up", path: "/account/register" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+const account = [
+  { name: "Profile", path: "/user/profile" },
+  { name: "My Listings", path: "/user/properties" },
+  { name: "Logout" },
+];
 
 function ResponsiveAppBar() {
   const auth = useContext(AuthContext);
+  const nameInitials =
+    auth?.user?.firstName?.[0]?.toUpperCase() +
+    auth?.user?.lastName?.[0]?.toUpperCase();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -51,25 +57,18 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
+    >
+      <Container maxWidth="lg">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-
+          <Box
+            component="img"
+            src={logo}
+            alt="Housen logo"
+            sx={{ display: { xs: "none", md: "block" }, width: 200 }}
+          />
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -77,7 +76,6 @@ function ResponsiveAppBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
             >
               <MenuIcon />
             </IconButton>
@@ -97,46 +95,28 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages
-                .filter((page) => {
-                  if (auth?.isLoggedIn) {
-                    return page.name.toLowerCase() !== "sign up";
-                  } else {
-                    return page;
-                  }
-                })
-                .map((page) => (
-                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                    <Typography sx={{ textAlign: "center" }}>
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "navlink mob active" : "navlink mob"
-                        }
-                        to={page.path}
-                      >
-                        {page.name}
-                      </NavLink>
-                    </Typography>
-                  </MenuItem>
-                ))}
+              {pages.map((page) => (
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: "center" }}>
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "navlink mob active" : "navlink mob"
+                      }
+                      to={page.path}
+                    >
+                      {page.name}
+                    </NavLink>
+                  </Typography>
+                </MenuItem>
+              ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
+          <Box
+            component="img"
+            src={logo}
+            alt="Housen logo"
+            sx={{ display: { xs: "block", md: "none" }, width: 200 }}
+          />
           <Box
             sx={{
               flexGrow: 1,
@@ -144,30 +124,18 @@ function ResponsiveAppBar() {
               justifyContent: "center",
             }}
           >
-            {pages
-              .filter((page) => {
-                if (auth?.isLoggedIn) {
-                  return page.name.toLowerCase() !== "sign up";
-                } else {
-                  return page;
+            {pages.map((page) => (
+              <NavLink
+                key={page.name}
+                onClick={handleCloseNavMenu}
+                className={({ isActive }) =>
+                  isActive ? "navlink active" : "navlink"
                 }
-              })
-              .map((page) => (
-                <Button
-                  key={page.name}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  <NavLink
-                    className={({ isActive }) =>
-                      isActive ? "navlink active" : "navlink"
-                    }
-                    to={page.path}
-                  >
-                    {page.name}
-                  </NavLink>
-                </Button>
-              ))}
+                to={page.path}
+              >
+                {page.name}
+              </NavLink>
+            ))}
           </Box>
           <Box
             sx={{
@@ -178,14 +146,32 @@ function ResponsiveAppBar() {
               alignItems: "center",
             }}
           >
-            {auth?.isLoggedIn && (
-              <Typography variant="body1">Hi Haris</Typography>
+            {auth?.isLoggedIn ? (
+              <Tooltip title="My Account">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    sx={{ backgroundColor: "#0e86e8", color: "#fff" }}
+                    alt="account"
+                  >
+                    {nameInitials}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Grid container spacing={1}>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "navlink active" : "navlink"
+                  }
+                  to={"/account"}
+                >
+                  Login
+                </NavLink>
+                <NavLink className={"button-primary"} to={"/account/register"}>
+                  Sign Up
+                </NavLink>
+              </Grid>
             )}
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -202,12 +188,32 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
+              {account.map((item, index) => (
+                <>
+                  {item.path ? (
+                    <NavLink
+                      onClick={handleCloseUserMenu}
+                      className={({ isActive }) =>
+                        isActive ? "navlink mob active" : "navlink mob"
+                      }
+                      to={item.path}
+                    >
+                      <MenuItem key={index} onClick={handleCloseUserMenu}>
+                        {item.name}
+                      </MenuItem>
+                    </NavLink>
+                  ) : (
+                    <MenuItem
+                      key={index}
+                      onClick={() => {
+                        auth?.logout();
+                        handleCloseUserMenu();
+                      }}
+                    >
+                      {item.name}
+                    </MenuItem>
+                  )}
+                </>
               ))}
             </Menu>
           </Box>
