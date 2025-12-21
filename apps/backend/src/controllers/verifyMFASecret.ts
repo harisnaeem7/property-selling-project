@@ -12,7 +12,6 @@ export const verifyMFASecret = async (req: AuthRequest, res: Response) => {
   if (!code) {
     return res.status(400).json({ message: "Token required" });
   }
-  console.log(code);
   const userId = req.user?.id;
   if (!userId) {
     return res.status(400).json({ message: "Invalid ID." });
